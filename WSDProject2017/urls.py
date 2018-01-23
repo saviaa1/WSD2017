@@ -16,12 +16,14 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from homepage import views
-from gamelist import views as gameviews
+from homepage import views as homeviews
+from gamelist import views as gamelistviews
+from gamepage import views as gamepageviews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='index'),
-    path('gamelist', gameviews.GameListView.as_view(), name='gamelist'),
+    path('', homeviews.index, name='index'),
+    path('gamelist/', gamelistviews.GameListView.as_view(), name='gamelist'),
+    path(r'^gamepage/(?P<gameid>[\d]+)/', gamepageviews.gameviews, name='gamepage')
 
 ]
