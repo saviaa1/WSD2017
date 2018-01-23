@@ -1,0 +1,6 @@
+{% block content %}
+    <h2>TOIMII, {{ user.username }}!</h2>
+    <p>ASDASDASD</p>
+    <p> {{ user.is_authenticated }} <p>
+    <p> What is {{ user.get_full_name }} 's role {{ user.profile.developer }}<p>
+{% endblock %}
