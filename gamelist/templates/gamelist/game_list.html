@@ -10,7 +10,7 @@
     <ul>
         {% for game in game_list %}
         <li>
-            <a href="{{ game.get_absolute_url }}">{{ game.name }}</a> ({{game.price}})
+            <a href="{{ game.game_url }}">{{ game.name }}</a> ({{game.price}})
         </li>
         {% endfor %}
     </ul>
