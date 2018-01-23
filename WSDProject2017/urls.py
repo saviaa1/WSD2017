@@ -22,6 +22,6 @@ from gamespage import views as gameviews
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('games', gameviews.games, name='games'),
-    
+    path('games', gameviews.GameListView.as_view(), name='games'),
+
 ]

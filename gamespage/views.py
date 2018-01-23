@@ -1,9 +1,8 @@
 from django.shortcuts import render
+from django.views import generic
+
+from .models import Game
 
 # Create your views here.
-def games(request):
-    return render(
-        request,
-        "games.html",
-        {},
-    )
+class GameListView(generic.ListView):
+    model = Game
