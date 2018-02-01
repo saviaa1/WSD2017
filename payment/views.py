@@ -1,11 +1,21 @@
+from django.http import HttpResponseNotFound
 from django.shortcuts import render
+from gamelist.models import Game
 from hashlib import md5
 
+#from django.contrib.auth.decorators import login_required
+
 # Create your views here.
-def payments(request):
-    pid = "123"
+#@login_required(login_url="/login")
+def payments(request, gameid):
+    try: 
+        game = Game.objects.get( id = gameid )
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound()
+    userid = "userid" #TODO use user id
+    pid = str(userid) + "_"+ str(gameid)
     sid = "GameShopASD"
-    amount = 5
+    amount = game.price;
     secret_key = "***REMOVED***"
     checksumstr = "pid={}&sid={}&amount={}&token={}".format(pid, sid, amount, secret_key)
     m = md5(checksumstr.encode("ascii"))
@@ -13,26 +23,38 @@ def payments(request):
     return render(
         request,
         "payments.html",
-        context={"pid":pid, "sid":sid, "amount":amount, "checksum":checksum},
+        context={"pid":pid, "sid":sid, "checksum":checksum, "game":game},
     )
     
-def success(request):
+def success(request, gameid):
+    try: 
+        game = Game.objects.get( id = gameid )
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound()
     return render(
         request,
         "success.html",
-        context={},
+        context={"game":game},
     )    
     
-def cancel(request):
+def cancel(request, gameid):
+    try: 
+        game = Game.objects.get( id = gameid )
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound()
     return render(
         request,
         "cancel.html",
-        context={},
+        context={"game":game},
     )    
     
-def error(request):
+def error(request, gameid):
+    try: 
+        game = Game.objects.get( id = gameid )
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound()
     return render(
         request,
         "error.html",
-        context={},
+        context={"game":game},
     )
