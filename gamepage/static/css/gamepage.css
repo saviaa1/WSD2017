@@ -1,0 +1,8 @@
+iframe {
+    margin-top: 20px;
+    margin-bottom: 30px;
+
+    -moz-box-shadow: 4px 4px 14px #000;
+    -webkit-box-shadow: 4px 4px 14px #000;
+    box-shadow: 4px 4px 14px #000;
+}
