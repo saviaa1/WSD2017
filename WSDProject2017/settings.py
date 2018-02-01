@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'homepage',
-	  'payment'
+    'payment',
     'gamelist',
     'gamepage',
 ]

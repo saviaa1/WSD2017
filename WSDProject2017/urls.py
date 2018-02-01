@@ -25,10 +25,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', homeviews.index, name='index'),
     path('gamelist/', gamelistviews.GameListView.as_view(), name='gamelist'),
-    path('gamepage/<int:gameid>/', gamepageviews.gameviews, name='gamepage')
-
+    path('gamepage/<int:gameid>/', gamepageviews.gameviews, name='gamepage'),
     path('payment', paymentviews.payments, name='payment'),
-	  path('payment/success', paymentviews.success, name='payment/success'),
-	  path('payment/cancel', paymentviews.cancel, name='payment/cancel'),
-	  path('payment/error', paymentviews.error, name='payment/error'),
+    path('payment/success', paymentviews.success, name='payment/success'),
+    path('payment/cancel', paymentviews.cancel, name='payment/cancel'),
+    path('payment/error', paymentviews.error, name='payment/error'),
 ]
