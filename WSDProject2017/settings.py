@@ -40,8 +40,9 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'homepage',
-    'gamespage',
-	'payment'
+	  'payment'
+    'gamelist',
+    'gamepage',
 ]
 
 MIDDLEWARE = [
