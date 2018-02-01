@@ -24,6 +24,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', homeviews.index, name='index'),
     path('gamelist/', gamelistviews.GameListView.as_view(), name='gamelist'),
-    path(r'^gamepage/(?P<gameid>[\d]+)/', gamepageviews.gameviews, name='gamepage')
+    path('gamepage/<int:gameid>/', gamepageviews.gameviews, name='gamepage')
 
 ]

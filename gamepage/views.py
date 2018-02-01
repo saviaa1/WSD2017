@@ -4,7 +4,7 @@ from gamelist.models import Game
 # Create your views here.
 #@login_required(login_url="/login")
 def gameviews(request, gameid):
-    game = Game.objects.get( id = gameid )
+    game = Game.objects.get( id = gameid ) #TODO antaa 404 jos gameid ei olemassa
     return render(
         request,
         "gamepage.html",

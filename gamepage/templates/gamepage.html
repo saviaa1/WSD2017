@@ -2,5 +2,13 @@
 
 {% block content %}
 <h1>Game: {{game.name}}</h1>
-  <iframe width="560" height="315" id="game_iframe" src="{{game.game_url}}"></iframe>
+  <iframe width="560" height="315" id="game_iframe" src="{{game.game_url}}" sandbox="allow-scripts"></iframe> <!-- TODO oikeudet -->
+  <script>
+    var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+    var eventer = window[eventMethod];
+    var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+    eventer(messageEvent,function(e) {
+        console.log("message: ",e.data);
+    },false);
+  </script>
 {% endblock %}
