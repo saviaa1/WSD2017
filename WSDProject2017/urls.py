@@ -18,10 +18,14 @@ from django.contrib import admin
 from django.urls import path
 from homepage import views
 from gamespage import views as gameviews
+from payment import views as paymentviews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('games', gameviews.GameListView.as_view(), name='games'),
-
+    path('payment', paymentviews.payments, name='payment'),
+	path('payment/success', paymentviews.success, name='payment/success'),
+	path('payment/cancel', paymentviews.cancel, name='payment/cancel'),
+	path('payment/error', paymentviews.error, name='payment/error'),
 ]
