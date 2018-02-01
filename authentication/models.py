@@ -9,6 +9,7 @@ class Profile(models.Model):
     email_confirmed = models.BooleanField(default=False)
     developer = models.BooleanField(default=False)
 
+# Defining signals so profile gets automatically updated or created when we update or create Users
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

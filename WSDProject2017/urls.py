@@ -20,13 +20,15 @@ from authentication import views
 from django.contrib.auth import views as authentication_views
 
 urlpatterns = [
+
+    #URLs for authentication part of the site
     path('admin/', admin.site.urls),
-    url(r'^$', views.home, name='home'),
+    url(r'^$', views.debug, name='debug'),
     url(r'^register/$', views.register, name='register'),
     url(r'^login/$', authentication_views.login, {'template_name': 'login.html'}, name='login'),
     url(r'^account_activation_sent/$', views.authEmailSent, name='authEmailSent'),
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         views.activate, name='activate'),
     url(r'^logout/$', authentication_views.logout, {'next_page': 'login'}, name='logout'),
-
+    url(r'^developer/$', views.developer, name='developer'),
 ]

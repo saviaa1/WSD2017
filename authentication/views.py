@@ -14,16 +14,14 @@ from authentication.models import Profile
 
 
 @login_required
-def home(request):
-    return render(request, 'home.html')
+def debug(request):
+    return render(request, 'debug.html')
 
-
+#View for registering new users
 def register(request):
     if request.method == 'POST':
         form = Registration(request.POST)
         if form.is_valid():
-            #not saving correctly
-            developer = form.cleaned_data.get('developer')
             user = form.save(commit=False)
             user.is_active = False
             user.save()
@@ -39,7 +37,10 @@ def register(request):
             return redirect('authEmailSent')
     else:
         form = Registration()
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'register.html', {
+        'form': form,
+        })
+
 
 def activate(request, uidb64, token):
     try:
@@ -53,9 +54,17 @@ def activate(request, uidb64, token):
         user.profile.email_confirmed = True
         user.save()
         login(request, user)
-        return redirect('home')
+        return redirect('debug')
     else:
         return render(request, 'authInvalid.html')
 
+
 def authEmailSent(request):
     return render(request, 'authEmailSent.html')
+
+@login_required
+def developer(request):
+    user = request.user
+    user.profile.developer = True
+    user.save()
+    return render(request, 'statusUpdated.html')
