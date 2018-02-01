@@ -9,5 +9,5 @@ def index(request):
     return render(
         request,
         "index.html",
-        context={"num_games":num_games, "num_customers":num_customers},
+        context={"num_games": num_games, "num_customers": num_customers},
     )
