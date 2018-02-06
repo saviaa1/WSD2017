@@ -12,13 +12,14 @@ def gameviews(request, gameid):
         game = Game.objects.get( id = gameid )
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
-    gamePurchased = False
-    owners = game.owners.all()
-    for owner in owners:
-        if owner == request.user.profile:
-            gamePurchased = True
-            break
-    if gamePurchased:
+    gameOwned = game.developer == request.user.profile
+    if not gameOwned:
+        owners = game.owners.all()
+        for owner in owners:
+            if owner == request.user.profile:
+                gameOwned = True
+                break
+    if gameOwned:
         return render(
             request,
             "gamepage.html",

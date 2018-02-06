@@ -5,4 +5,4 @@ from gamelist.models import Game
 class Purchase(models.Model):
     username = models.CharField(max_length=150, blank=False)
     gameid = models.IntegerField(blank=False, default=1)
-    
+    date = models.DateField(auto_now=True)

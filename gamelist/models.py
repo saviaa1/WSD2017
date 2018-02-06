@@ -10,7 +10,7 @@ class Game(models.Model):
 	image_url = models.URLField(blank=True)
 	game_url = models.URLField(blank=False)
 	developer = models.ForeignKey('authentication.Profile', on_delete=models.CASCADE, null=True, related_name='games')
-	owners = models.ManyToManyField('authentication.Profile', null=True, related_name='purchasedgames')
+	owners = models.ManyToManyField('authentication.Profile', related_name='purchasedgames')
 	# Set ForeignKey as profile so a game can be linked to a users profile and users can have multiple games
 	# A many-to-one relation
 	def getuser(self):
