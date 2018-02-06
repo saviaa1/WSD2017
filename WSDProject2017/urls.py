@@ -13,15 +13,19 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-
+from django.conf.urls import url, include
 from django.contrib import admin
 from django.urls import path
 from homepage import views as homeviews
 from gamelist import views as gamelistviews
 from gamepage import views as gamepageviews
 from payment import views as paymentviews
+from authentication import views as authenticationviews
+from django.contrib.auth import views as django_authentication_views
 
 urlpatterns = [
+
+    #URLs for authentication part of the site
     path('admin/', admin.site.urls),
     path('', homeviews.index, name='index'),
     path('gamelist/', gamelistviews.GameListView.as_view(), name='gamelist'),
@@ -30,4 +34,12 @@ urlpatterns = [
     path('purchase/success/', paymentviews.success, name='purchase/success'),
     path('purchase/cancel/', paymentviews.cancel, name='purchase/cancel'),
     path('purchase/error/', paymentviews.error, name='purchase/error'),
+    url(r'^debug/$', authenticationviews.debug, name='debug'),
+    url(r'^register/$', authenticationviews.register, name='register'),
+    url(r'^login/$', django_authentication_views.login, {'template_name': 'login.html'}, name='login'),
+    url(r'^account_activation_sent/$', authenticationviews.authEmailSent, name='authEmailSent'),
+    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        authenticationviews.activate, name='activate'),
+    url(r'^logout/$', django_authentication_views.logout, {'next_page': 'login'}, name='logout'),
+    url(r'^developer/$', authenticationviews.developer, name='developer'),
 ]
