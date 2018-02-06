@@ -22,6 +22,7 @@ from gamepage import views as gamepageviews
 from payment import views as paymentviews
 from authentication import views as authenticationviews
 from django.contrib.auth import views as django_authentication_views
+from developer import views as developerviews
 
 urlpatterns = [
 
@@ -42,4 +43,5 @@ urlpatterns = [
         authenticationviews.activate, name='activate'),
     url(r'^logout/$', django_authentication_views.logout, {'next_page': 'login'}, name='logout'),
     url(r'^developer/$', authenticationviews.developer, name='developer'),
+    path('adding/', developerviews.adding, name='adding'),
 ]

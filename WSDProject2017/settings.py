@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'gamelist',
     'gamepage',
     'authentication',
+    'developer',
 ]
 
 MIDDLEWARE = [

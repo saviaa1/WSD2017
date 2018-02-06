@@ -3,4 +3,11 @@
     <p>ASDASDASD</p>
     <p> {{ user.is_authenticated }} <p>
     <p> What is {{ user.username }} 's role {{ user.profile.developer }}<p>
+    <p> owned games <p>
+    <p>
+    {% for p in user.profile.games.all %}
+        {{p.name}}
+    {% endfor %}
+    </p>
+    <p> {{ user.profile.games.all }} </p>
 {% endblock %}
