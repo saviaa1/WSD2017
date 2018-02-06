@@ -9,11 +9,11 @@
     <input type="hidden" name="pid" value="{{pid}}" />
     <input type="hidden" name="sid" value="{{sid}}" />
     <input type="hidden" name="success_url"
-            value="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{% url 'purchase/success' gameid=game.id %}" />
+            value="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{% url 'purchase/success' %}" />
     <input type="hidden" name="cancel_url"
-            value="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{% url 'purchase/cancel' gameid=game.id %}" />
+            value="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{% url 'purchase/cancel' %}" />
     <input type="hidden" name="error_url"
-            value="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{% url 'purchase/error' gameid=game.id %}" />
+            value="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{% url 'purchase/error' %}" />
     <input type="hidden" name="checksum" value="{{checksum}}" />
     <input type="hidden" id="id_amount" name="amount" value="{{game.price}}"/>
     <input type="submit" value="Accept Payment"/>

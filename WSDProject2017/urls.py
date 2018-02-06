@@ -27,7 +27,7 @@ urlpatterns = [
     path('gamelist/', gamelistviews.GameListView.as_view(), name='gamelist'),
     path('gamepage/<int:gameid>/', gamepageviews.gameviews, name='gamepage'),
     path('purchase/<int:gameid>/', paymentviews.payments, name='purchase'),
-    path('purchase/success/<int:gameid>/', paymentviews.success, name='purchase/success'),
-    path('purchase/cancel/<int:gameid>/', paymentviews.cancel, name='purchase/cancel'),
-    path('purchase/error/<int:gameid>/', paymentviews.error, name='purchase/error'),
+    path('purchase/success/', paymentviews.success, name='purchase/success'),
+    path('purchase/cancel/', paymentviews.cancel, name='purchase/cancel'),
+    path('purchase/error/', paymentviews.error, name='purchase/error'),
 ]
