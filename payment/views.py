@@ -6,14 +6,13 @@ from hashlib import md5
 from django.contrib.auth.models import User
 from gamelist.models import Game
 from payment.models import Purchase
-
-#from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
 
 sid = "GameShopASD"
 secret_key = "***REMOVED***"
 
 # Create your views here.
-#@login_required(login_url="/login")
+@login_required(login_url="/login")
 def payments(request, gameid):
     try: 
         game = Game.objects.get( id = gameid )
@@ -34,6 +33,7 @@ def payments(request, gameid):
         context={"pid":purchase.id, "sid":sid, "checksum":checksum, "game":game},
     )
     
+@login_required(login_url="/login")
 def success(request):
     pid = request.GET.get('pid')
     ref = request.GET.get('ref')
@@ -48,6 +48,7 @@ def success(request):
             game = Game.objects.get( id = purchase.gameid )
         except ObjectDoesNotExist:
             return HttpResponseNotFound()
+        game.owners.add(request.user.profile)
         return render(
             request,
             "success.html",
@@ -60,7 +61,6 @@ def cancel(request):
     pid = request.GET.get('pid')
     try: 
         purchase = Purchase.objects.get( id = pid )
-        purchase.delete()
         game = Game.objects.get( id = purchase.gameid )
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
@@ -74,7 +74,6 @@ def error(request):
     pid = request.GET.get('pid')
     try: 
         purchase = Purchase.objects.get( id = pid )
-        purchase.delete()
         game = Game.objects.get( id = purchase.gameid )
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
