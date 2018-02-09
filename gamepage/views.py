@@ -1,28 +1,21 @@
 from django.shortcuts import render
 from gamelist.models import Game
-from django.http import HttpResponse
 import json
 # from django.contrib.auth.decorators import login_required
 # Create your views here.
 # @login_required(login_url="/login")
 
-
-def gameviews(request, gameid):
-    game = Game.objects.get(id=gameid)  # TODO antaa 404 jos gameid ei olemassa
-    return render(
-        request,
-        "gamepage.html",
-        context={"game": game},
-    )
-
-
-# TODO: temp vars, kun SQL tehty poista nämä
-gameState = dict()
+# TODO: temp vars, kun SQL tehty poista nämä, jos ihan tyhjä niin testgame antaa error
+gameState = {'playerItems': [], 'score': 0}
 GLOBAL_Entry = None
 
 
-def iframeMessage(request):  # TODO: pitäisikö käyttää try catch rakennetta täällä. muutamassa kohdassa mahd kaatua jos tulee muuta kuin pitäisi
+def gameviews(request, gameid):
+    game = Game.objects.get(id=gameid)  # TODO antaa 404 jos gameid ei olemassa
+
     if request.method == "POST":
+        # TODO: pitäisikö käyttää try catch rakennetta täällä.
+        # Muutamassa kohdassa mahd kaatua jos tulee
         global gameState, GLOBAL_Entry
         jsonDATA = json.loads(request.POST['data'])
         print(jsonDATA)
@@ -31,7 +24,6 @@ def iframeMessage(request):  # TODO: pitäisikö käyttää try catch rakennetta
             score = float(jsonDATA["score"])
             print("score = ", score)
             # TODO: tallenna SQL
-            return HttpResponse("score success")
 
         elif jsonDATA["messageType"] == "SAVE":
             # TODO: if else globaalin muuttujan takia
@@ -42,23 +34,24 @@ def iframeMessage(request):  # TODO: pitäisikö käyttää try catch rakennetta
                 gameState = jsonDATA["gameState"]
             print("gameState = ", gameState)
             # TODO: tallenna SQL
-            return HttpResponse("save gameState succeess")
-
-        elif jsonDATA["messageType"] == "LOAD_REQUEST":
+        # TODO: onko seuraavalla käyttöä?
+            '''elif jsonDATA["messageType"] == "LOAD_REQUEST":
             # TODO: jos löytyy gameState lähetä se muuten lähetä errorMessage
             if not gameState:
                 print("load_request: fail")
                 # TODO: lähetä error message iframille
-                return HttpResponse("load_request, None")
             else:
                 # TODO: lataa SQL ja lähetä se
-                print("load_request = ", gameState)
-                return HttpResponse("load_request, succeess")
+                print("load_request = ", gameState)'''
 
         else:
             print("if POST success, something inside failed")
-            return HttpResponse("err")
 
     else:
         print("if POST fail")
-        return HttpResponse("err")
+
+    return render(
+        request,
+        "gamepage.html",
+        {"game": game, "savedGame": json.dumps(gameState)},
+    )

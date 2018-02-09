@@ -4,3 +4,7 @@ staticfiles
 .env
 
 \.ropeproject/
+
+gamepage/__pycache__/
+
+gamepage/static/css/migrations/

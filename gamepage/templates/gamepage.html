@@ -22,21 +22,28 @@
         var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
         eventer(messageEvent,function(e) {
             console.log(e.data);
-            if (e.data.messageType == "SETTING") {
-                var settingWidth = e.data.options.width;
-                var settingHeight = e.data.options.height;
-                console.log(settingWidth, settingHeight);
-                document.getElementById("game_iframe").width = settingWidth;
-                document.getElementById("game_iframe").height = settingHeight;
-            }
-            else {
-                var postdata = {
-                    data: JSON.stringify(e.data),
-                    dataType: 'text',
-                    contentType: 'application/json; charset=utf-8',
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                }
-                $.post("../iframe/", postdata);
+            switch(e.data.messageType) {
+                case "SETTING":
+                    var settingWidth = e.data.options.width;
+                    var settingHeight = e.data.options.height;
+                    console.log(settingWidth, settingHeight);
+                    document.getElementById("game_iframe").width = settingWidth;
+                    document.getElementById("game_iframe").height = settingHeight;
+                case "LOAD_REQUEST":
+                    var message  = {
+                        messageType: "LOAD",
+                        gameState: JSON.parse('{{savedGame | escapejs}}'),
+                    };
+                    console.log(message);
+                    document.getElementById("game_iframe").contentWindow.postMessage(message, '*');
+                default:
+                    var postdata = {
+                        data: JSON.stringify(e.data),
+                        dataType: 'text',
+                        contentType: 'application/json; charset=utf-8',
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    }
+                    $.post("", postdata);
             }
         },false);
     </script>
