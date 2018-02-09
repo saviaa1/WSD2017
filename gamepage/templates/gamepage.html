@@ -20,6 +20,7 @@
         var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
         var eventer = window[eventMethod];
         var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+        var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
         eventer(messageEvent,function(e) {
             console.log(e.data);
             switch(e.data.messageType) {
@@ -29,15 +30,30 @@
                     console.log(settingWidth, settingHeight);
                     document.getElementById("game_iframe").width = settingWidth;
                     document.getElementById("game_iframe").height = settingHeight;
+                    break;
                 case "LOAD_REQUEST":
-                    var message  = {
-                        messageType: "LOAD",
-                        gameState: JSON.parse('{{savedGame | escapejs}}'),
-                    };
-                    console.log(message);
-                    document.getElementById("game_iframe").contentWindow.postMessage(message, '*');
+                    $.ajax({
+                        method: "POST",
+                        url: "./loadgamedata/",
+                        csrfmiddlewaretoken: csrftoken,
+                        success: function(data) {
+                            var gameState = JSON.parse(data.gameState);
+                            if (gameState === "ERROR") {
+                                var message =  {
+                                    messageType: "ERROR",
+                                    info: "Gamestate could not be loaded"
+                                };
+                            } else {
+                                var message  = {
+                                    messageType: "LOAD",
+                                    gameState: gameState,//JSON.parse('{{savedGame | escapejs}}'),
+                                };
+                            }
+                            document.getElementById("game_iframe").contentWindow.postMessage(message, '*');
+                        },
+                    });
+                    break;
                 default:
-                    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
                     var postdata = {
                         data: JSON.stringify(e.data),
                         dataType: 'text',

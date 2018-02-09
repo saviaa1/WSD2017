@@ -1,18 +1,14 @@
-from django.http import HttpResponseNotFound
+from django.http import HttpResponseNotFound, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.shortcuts import redirect
-from gamelist.models import Game
-from django.views.decorators.csrf import csrf_protect
-import json
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.contrib.auth.decorators import login_required
+import json
+from gamelist.models import Game
+from gamepage.models import GameData
 
 # Create your views here.
-
-# TODO: temp vars, kun SQL tehty poista nämä, jos ihan tyhjä niin testgame antaa error
-gameState = {'playerItems': [], 'score': 0}
-GLOBAL_Entry = None
-
 
 @csrf_protect
 @login_required(login_url="/login")
@@ -21,37 +17,23 @@ def gameviews(request, gameid):
         game = Game.objects.get( id = gameid )
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
-
+    try: 
+        gameData = GameData.objects.get( game = game, player = request.user.profile )
+    except ObjectDoesNotExist:
+        gameData = GameData(player = request.user.profile, game = game)
+        
     if request.method == "POST":
-        # TODO: pitäisikö käyttää try catch rakennetta täällä.
-        # Muutamassa kohdassa mahd kaatua jos tulee
-        global gameState, GLOBAL_Entry
         jsonDATA = json.loads(request.POST['data'])
-        print(jsonDATA)
-
         if jsonDATA["messageType"] == "SCORE":
             score = float(jsonDATA["score"])
-            print("score = ", score)
-            # TODO: tallenna SQL
+            if (not gameData.highscore or score > gameData.highscore):
+                gameData.highscore = score
+                gameData.save()
 
         elif jsonDATA["messageType"] == "SAVE":
-            # TODO: if else globaalin muuttujan takia
-            if not gameState:
-                gameState = jsonDATA["gameState"]
-            else:
-                gameState.clear()
-                gameState = jsonDATA["gameState"]
-            print("gameState = ", gameState)
-            # TODO: tallenna SQL
-        # TODO: onko seuraavalla käyttöä?
-            '''elif jsonDATA["messageType"] == "LOAD_REQUEST":
-            # TODO: jos löytyy gameState lähetä se muuten lähetä errorMessage
-            if not gameState:
-                print("load_request: fail")
-                # TODO: lähetä error message iframille
-            else:
-                # TODO: lataa SQL ja lähetä se
-                print("load_request = ", gameState)'''
+            print(jsonDATA["gameState"])
+            gameData.gameState = str(jsonDATA["gameState"]).replace("\'", "\"")
+            gameData.save()
 
         else:
             print("if POST success, something inside failed")
@@ -70,7 +52,17 @@ def gameviews(request, gameid):
         return render(
             request,
             "gamepage.html",
-            context={"game":game, "savedGame": json.dumps(gameState)},
+            context={"game":game, "savedGame": json.dumps(gameData.gameState)},
         )
     else:
         return redirect('purchase', gameid=gameid)
+        
+@csrf_exempt
+@login_required(login_url="/login")
+def loadgamedata(request, gameid):
+    try: 
+        game = Game.objects.get( id = gameid )
+        gameData = GameData.objects.get( game = game, player = request.user.profile )
+    except ObjectDoesNotExist:
+        return JsonResponse({"gameState": "ERROR"})
+    return JsonResponse({"gameState": gameData.gameState})

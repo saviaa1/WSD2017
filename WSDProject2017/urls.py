@@ -31,6 +31,7 @@ urlpatterns = [
     path('', homeviews.index, name='index'),
     path('gamelist/', gamelistviews.GameListView.as_view(), name='gamelist'),
     path('gamepage/<int:gameid>/', gamepageviews.gameviews, name='gamepage'),
+    path('gamepage/<int:gameid>/loadgamedata/', gamepageviews.loadgamedata, name='loadgamedata'),
     path('purchase/<int:gameid>/', paymentviews.payments, name='purchase'),
     path('purchase/success/', paymentviews.success, name='purchase/success'),
     path('purchase/cancel/', paymentviews.cancel, name='purchase/cancel'),
