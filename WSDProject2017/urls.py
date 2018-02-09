@@ -22,6 +22,7 @@ from gamepage import views as gamepageviews
 from payment import views as paymentviews
 from authentication import views as authenticationviews
 from django.contrib.auth import views as django_authentication_views
+from developer import views as developerviews
 
 urlpatterns = [
 
@@ -30,10 +31,10 @@ urlpatterns = [
     path('', homeviews.index, name='index'),
     path('gamelist/', gamelistviews.GameListView.as_view(), name='gamelist'),
     path('gamepage/<int:gameid>/', gamepageviews.gameviews, name='gamepage'),
-    path('payment', paymentviews.payments, name='payment'),
-    path('payment/success', paymentviews.success, name='payment/success'),
-    path('payment/cancel', paymentviews.cancel, name='payment/cancel'),
-    path('payment/error', paymentviews.error, name='payment/error'),
+    path('purchase/<int:gameid>/', paymentviews.payments, name='purchase'),
+    path('purchase/success/', paymentviews.success, name='purchase/success'),
+    path('purchase/cancel/', paymentviews.cancel, name='purchase/cancel'),
+    path('purchase/error/', paymentviews.error, name='purchase/error'),
     url(r'^debug/$', authenticationviews.debug, name='debug'),
     url(r'^register/$', authenticationviews.register, name='register'),
     url(r'^login/$', django_authentication_views.login, {'template_name': 'login.html'}, name='login'),
@@ -42,4 +43,5 @@ urlpatterns = [
         authenticationviews.activate, name='activate'),
     url(r'^logout/$', django_authentication_views.logout, {'next_page': 'login'}, name='logout'),
     url(r'^developer/$', authenticationviews.developer, name='developer'),
+    path('adding/', developerviews.adding, name='adding'),
 ]

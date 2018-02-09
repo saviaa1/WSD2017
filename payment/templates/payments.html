@@ -3,19 +3,19 @@
 {% block content %}
 <h1>Game shop asd </h1>
 
-  <p> Are you sure you want to purchase this game for {{amount}} €? </p>
+  <p> Are you sure you want to purchase the game <b>{{game.name}}</b> for <b>{{game.price}} €</b>? </p>
 
   <form action="http://payments.webcourse.niksula.hut.fi/pay/" method="POST">
     <input type="hidden" name="pid" value="{{pid}}" />
     <input type="hidden" name="sid" value="{{sid}}" />
     <input type="hidden" name="success_url"
-            value="http://localhost:8000/payment/success" />
+            value="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{% url 'purchase/success' %}" />
     <input type="hidden" name="cancel_url"
-            value="http://localhost:8000/payment/cancel" />
+            value="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{% url 'purchase/cancel' %}" />
     <input type="hidden" name="error_url"
-            value="http://localhost:8000/payment/error" />
+            value="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{% url 'purchase/error' %}" />
     <input type="hidden" name="checksum" value="{{checksum}}" />
-    <input type="hidden" id="id_amount" name="amount" value="{{amount}}"/>
+    <input type="hidden" id="id_amount" name="amount" value="{{game.price}}"/>
     <input type="submit" value="Accept Payment"/>
   </form>
 

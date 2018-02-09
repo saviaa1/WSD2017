@@ -1,10 +1,13 @@
+from django.http import HttpResponseNotFound
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
+from django.shortcuts import redirect
 from gamelist.models import Game
 from django.views.decorators.csrf import csrf_protect
 import json
-# from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
-# @login_required(login_url="/login")
 
 # TODO: temp vars, kun SQL tehty poista nämä, jos ihan tyhjä niin testgame antaa error
 gameState = {'playerItems': [], 'score': 0}
@@ -12,8 +15,12 @@ GLOBAL_Entry = None
 
 
 @csrf_protect
+@login_required(login_url="/login")
 def gameviews(request, gameid):
-    game = Game.objects.get(id=gameid)  # TODO antaa 404 jos gameid ei olemassa
+    try: 
+        game = Game.objects.get( id = gameid )
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound()
 
     if request.method == "POST":
         # TODO: pitäisikö käyttää try catch rakennetta täällä.
@@ -52,8 +59,18 @@ def gameviews(request, gameid):
     else:
         print("if POST fail")
 
-    return render(
-        request,
-        "gamepage.html",
-        {"game": game, "savedGame": json.dumps(gameState)},
-    )
+    gameOwned = game.developer == request.user.profile
+    if not gameOwned:
+        owners = game.owners.all()
+        for owner in owners:
+            if owner == request.user.profile:
+                gameOwned = True
+                break
+    if gameOwned:
+        return render(
+            request,
+            "gamepage.html",
+            context={"game":game, "savedGame": json.dumps(gameState)},
+        )
+    else:
+        return redirect('purchase', gameid=gameid)
