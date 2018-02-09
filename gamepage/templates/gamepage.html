@@ -1,18 +1,43 @@
 {% extends "base.html" %}
+
 {% block title %}
     <title>{{game.name}}</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/gamepage.css' %}">
 {% endblock %}
+
 {% block content %}
-    <h1>Game: {{game.name}}</h1>
-    <iframe width="560" height="315" id="game_iframe" src="{{game.game_url}}" sandbox="allow-scripts"></iframe> <!-- TODO oikeudet -->
+    <h1>{{game.name}}</h1>
+    <iframe id="game_iframe"
+        width="500"
+        height="300"
+        src="{{game.game_url}}"
+        sandbox="allow-scripts"
+        <p>Your browser does not support iframes.</p>
+    </iframe> <!-- TODO: oikeudet -->
+    {% csrf_token %}
     <script>
         var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
         var eventer = window[eventMethod];
         var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
         eventer(messageEvent,function(e) {
-            console.log("message: ",e.data);
+            console.log(e.data);
+            if (e.data.messageType == "SETTING") {
+                var settingWidth = e.data.options.width;
+                var settingHeight = e.data.options.height;
+                console.log(settingWidth, settingHeight);
+                document.getElementById("game_iframe").width = settingWidth;
+                document.getElementById("game_iframe").height = settingHeight;
+            }
+            else {
+                var postdata = {
+                    data: JSON.stringify(e.data),
+                    dataType: 'text',
+                    contentType: 'application/json; charset=utf-8',
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                }
+                $.post("../iframe/", postdata);
+            }
         },false);
     </script>
 {% endblock %}
