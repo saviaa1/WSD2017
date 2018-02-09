@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from gamelist.models import Game
+from django.views.decorators.csrf import csrf_protect
 import json
 # from django.contrib.auth.decorators import login_required
 # Create your views here.
@@ -10,6 +11,7 @@ gameState = {'playerItems': [], 'score': 0}
 GLOBAL_Entry = None
 
 
+@csrf_protect
 def gameviews(request, gameid):
     game = Game.objects.get(id=gameid)  # TODO antaa 404 jos gameid ei olemassa
 

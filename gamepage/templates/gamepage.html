@@ -16,7 +16,7 @@
         <p>Your browser does not support iframes.</p>
     </iframe> <!-- TODO: oikeudet -->
     {% csrf_token %}
-    <script>
+    <script type="text/javascript">
         var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
         var eventer = window[eventMethod];
         var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
@@ -37,11 +37,12 @@
                     console.log(message);
                     document.getElementById("game_iframe").contentWindow.postMessage(message, '*');
                 default:
+                    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
                     var postdata = {
                         data: JSON.stringify(e.data),
                         dataType: 'text',
                         contentType: 'application/json; charset=utf-8',
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        csrfmiddlewaretoken: csrftoken,
                     }
                     $.post("", postdata);
             }
