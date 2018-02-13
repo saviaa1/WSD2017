@@ -12,9 +12,14 @@
         width="500"
         height="300"
         src="{{game.game_url}}"
-        sandbox="allow-scripts"
+        sandbox="allow-scripts allow-modals"
         <p>Your browser does not support iframes.</p>
     </iframe> <!-- TODO: oikeudet -->
+    <ul id="game_highscore">
+        {% for score in highscores %}
+            <li> {{score.0}}: {{score.1}} </li>
+        {% endfor %}
+    </ul>
     {% csrf_token %}
     <script type="text/javascript">
         var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
@@ -32,13 +37,24 @@
                     document.getElementById("game_iframe").height = settingHeight;
                     break;
                 case "LOAD_REQUEST":
+                    function csrfSafeMethod(method) {
+                        // these HTTP methods do not require CSRF protection
+                        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+                    }
+                    $.ajaxSetup({
+                        beforeSend: function(xhr, settings) {
+                            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                            }
+                        }
+                    });
                     $.ajax({
-                        method: "POST",
-                        url: "./loadgamedata/",
-                        csrfmiddlewaretoken: csrftoken,
+                        "type": "POST",
+                        "dataType": "json",
+                        "url": "./loadgamedata/",
                         success: function(data) {
                             var gameState = JSON.parse(data.gameState);
-                            if (gameState === "ERROR") {
+                            if (gameState == null) {
                                 var message =  {
                                     messageType: "ERROR",
                                     info: "Gamestate could not be loaded"
@@ -46,7 +62,7 @@
                             } else {
                                 var message  = {
                                     messageType: "LOAD",
-                                    gameState: gameState,//JSON.parse('{{savedGame | escapejs}}'),
+                                    gameState: gameState,
                                 };
                             }
                             document.getElementById("game_iframe").contentWindow.postMessage(message, '*');
@@ -59,7 +75,7 @@
                         dataType: 'text',
                         contentType: 'application/json; charset=utf-8',
                         csrfmiddlewaretoken: csrftoken,
-                    }
+                    };
                     $.post("", postdata);
             }
         },false);

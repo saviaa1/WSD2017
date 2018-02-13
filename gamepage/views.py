@@ -10,30 +10,39 @@ from gamepage.models import GameData
 
 # Create your views here.
 
+
 @csrf_protect
 @login_required(login_url="/login")
 def gameviews(request, gameid):
-    try: 
-        game = Game.objects.get( id = gameid )
+    try:
+        game = Game.objects.get(id=gameid)
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
-    try: 
-        gameData = GameData.objects.get( game = game, player = request.user.profile )
+    try:
+        gameData = GameData.objects.filter(game=game).order_by("-highscore")
+        highscores = []
+        for i in range(min(5, len(gameData))):
+            highscores.append((gameData[i].player.user, gameData[i].highscore))
     except ObjectDoesNotExist:
-        gameData = GameData(player = request.user.profile, game = game)
-        
+        highscores = []
+    try:
+        gameDataForUser = GameData.objects.get(game=game, player=request.user.profile)
+    except ObjectDoesNotExist:
+        gameDataForUser = GameData(player=request.user.profile, game=game)
+
+
     if request.method == "POST":
         jsonDATA = json.loads(request.POST['data'])
         if jsonDATA["messageType"] == "SCORE":
             score = float(jsonDATA["score"])
-            if (not gameData.highscore or score > gameData.highscore):
-                gameData.highscore = score
-                gameData.save()
+            if (not gameDataForUser.highscore or score > gameDataForUser.highscore):
+                gameDataForUser.highscore = score
+                gameDataForUser.save()
 
         elif jsonDATA["messageType"] == "SAVE":
             print(jsonDATA["gameState"])
-            gameData.gameState = str(jsonDATA["gameState"]).replace("\'", "\"")
-            gameData.save()
+            gameDataForUser.gameState = str(jsonDATA["gameState"]).replace("\'", "\"")
+            gameDataForUser.save()
 
         else:
             print("if POST success, something inside failed")
@@ -52,17 +61,21 @@ def gameviews(request, gameid):
         return render(
             request,
             "gamepage.html",
-            context={"game":game, "savedGame": json.dumps(gameData.gameState)},
+            {"game": game, "highscores": highscores},
         )
     else:
         return redirect('purchase', gameid=gameid)
-        
-@csrf_exempt
+
+
+@csrf_protect
 @login_required(login_url="/login")
 def loadgamedata(request, gameid):
-    try: 
-        game = Game.objects.get( id = gameid )
-        gameData = GameData.objects.get( game = game, player = request.user.profile )
+    try:
+        game = Game.objects.get(id=gameid)
+        gameDataForUser = GameData.objects.get(game=game, player=request.user.profile)
     except ObjectDoesNotExist:
-        return JsonResponse({"gameState": "ERROR"})
-    return JsonResponse({"gameState": gameData.gameState})
+        print("Return load error")
+        return JsonResponse({"gameState": None})
+    print("Return load success")
+    print(gameDataForUser.gameState)
+    return JsonResponse({"gameState": gameDataForUser.gameState})
