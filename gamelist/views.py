@@ -1,6 +1,5 @@
 from django.views import generic
-
-from .models import Game
+from .models import Game, GameCategories
 
 
 # Create your views here.

@@ -20,7 +20,6 @@
                     <img src="{{ game.image_url }}" alt="game's image" width="10%", height="10%">
                 {% endif %}
                 {{ game.name }}
-                {{ game.description }}
             </a>
             {% if game.developer == request.user.profile or request.user.profile in game.owners.all %}
                 Owned

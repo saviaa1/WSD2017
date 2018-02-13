@@ -15,6 +15,9 @@
         sandbox="allow-scripts allow-modals"
         <p>Your browser does not support iframes.</p>
     </iframe> <!-- TODO: oikeudet -->
+    <p class="game_description">
+        {{game.description}}
+    </p>
     <ul id="game_highscore">
         {% for score in highscores %}
             <li> {{score.0}}: {{score.1}} </li>
