@@ -1,0 +1,8 @@
+{% block content %}
+<p> Here are your games:</p>
+{% for p in user.profile.games.all %}
+    {{p.name}}
+    {{p.id}}
+    <a href="{% url 'delete_game' object_id=p.id %}">delete</a>
+{% endfor %}
+{% endblock %}

@@ -26,7 +26,6 @@ from developer import views as developerviews
 
 urlpatterns = [
 
-    #URLs for authentication part of the site
     path('admin/', admin.site.urls),
     path('', homeviews.index, name='index'),
     path('gamelist/', gamelistviews.GameListView.as_view(), name='gamelist'),
@@ -45,4 +44,8 @@ urlpatterns = [
     url(r'^logout/$', django_authentication_views.logout, {'next_page': 'login'}, name='logout'),
     url(r'^developer/$', authenticationviews.developer, name='developer'),
     path('adding/', developerviews.adding, name='adding'),
+    url(r'^(?P<object_id>[0-9]+)/delete_game/$', developerviews.deleting, name='delete_game'),
+    url(r'^profile/$', developerviews.profile, name='profile'),   
+
+
 ]
