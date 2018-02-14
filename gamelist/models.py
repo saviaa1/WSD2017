@@ -13,6 +13,7 @@ class GameCategories:
         ("SHOOTER", "Shooter"),
         ("STRATEGY", "Strategy"),
     )
+    categoriesList =  ("OTHER", "ACTION", "ARCADE", "PUZZLE", "RACING", "SHOOTER", "STRATEGY")
 
 
 # Create your models here.

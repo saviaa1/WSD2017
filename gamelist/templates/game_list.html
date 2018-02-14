@@ -9,9 +9,9 @@
 
     <h2>Game list</h2>
     {% load static %}
-    {% if game_list %}
+    {% if gameQSet %}
     <ul>
-        {% for game in game_list %}
+        {% for game in gameQSet %}
         <li>
             <a href="{% url 'gamepage' gameid=game.id %}">
                 {% if not game.image_url %}
@@ -20,6 +20,7 @@
                     <img src="{{ game.image_url }}" alt="game's image" width="10%", height="10%">
                 {% endif %}
                 {{ game.name }}
+                {{ game.category }}
             </a>
             {% if game.developer == request.user.profile or request.user.profile in game.owners.all %}
                 Owned
@@ -32,25 +33,26 @@
     {% else %}
         <p>There are no games in the library.</p>
     {% endif %}
-    {% if is_paginated %}
-        <ul class="pagination">
-            {% if page_obj.has_previous %}
-                <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+    {% if gameQSet.has_other_pages %}
+    <ul class="pagination">
+        {% if gameQSet.has_previous %}
+            <li><a href="?page={{ gameQSet.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+            <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in gameQSet.paginator.page_range %}
+            {% if gameQSet.number == i %}
+                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
             {% else %}
-                <li class="disabled"><span>&laquo;</span></li>
+                <li><a href="?page={{ i }}">{{ i }}</a></li>
             {% endif %}
-            {% for i in paginator.page_range %}
-                {% if page_obj.number == i %}
-                    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-                {% else %}
-                    <li><a href="?page={{ i }}">{{ i }}</a></li>
-                {% endif %}
-            {% endfor %}
-            {% if page_obj.has_next %}
-                <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
-            {% else %}
-                <li class="disabled"><span>&raquo;</span></li>
-            {% endif %}
-        </ul>
+        {% endfor %}
+        {% if gameQSet.has_next %}
+            <li><a href="?page={{ gameQSet.next_page_number }}">&raquo;</a></li>
+        {% else %}
+            <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+    </ul>
     {% endif %}
+
 {% endblock %}
