@@ -45,7 +45,7 @@ urlpatterns = [
     url(r'^developer/$', authenticationviews.developer, name='developer'),
     path('adding/', developerviews.adding, name='adding'),
     url(r'^(?P<object_id>[0-9]+)/delete_game/$', developerviews.deleting, name='delete_game'),
-    url(r'^profile/$', developerviews.profile, name='profile'),   
-
+    url(r'^profile/$', developerviews.profile, name='profile'),
+    url(r'^(?P<object_id>[0-9]+)/edit_game/$', developerviews.editing, name='edit_game'),
 
 ]

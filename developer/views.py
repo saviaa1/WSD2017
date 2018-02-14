@@ -38,3 +38,22 @@ def deleting(request, object_id):
 @login_required
 def profile(request):
     return render(request, 'profile.html')
+
+@login_required
+def editing(request, object_id):
+    game = Game.objects.get( id = object_id )
+    gameOwned = game.developer == request.user.profile
+    if gameOwned:
+        if request.method == 'POST':
+            form = AddGame(request.POST, instance=game)
+            if form.is_valid():
+                instance = form.save(commit=False)
+                instance.developer = request.user.profile
+                instance.save()
+                return redirect('profile')
+        else:
+            form = AddGame(instance=game)
+        c = { "form": form, "object_id": game }
+        return render(request, "adding.html", c)
+    else:
+        redirect(request, 'profile.html')
