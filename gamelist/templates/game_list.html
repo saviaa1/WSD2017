@@ -8,51 +8,68 @@
     <p>Welcome to <em>asd</em>, a very basic game site.</p>
 
     <h2>Game list</h2>
-    {% load static %}
     {% if gameQSet %}
-    <ul>
+    <SquareGrid class="arena">
         {% for game in gameQSet %}
-        <li>
-            <a href="{% url 'gamepage' gameid=game.id %}">
-                {% if not game.image_url %}
-                    <img src="http://www.publicdomainpictures.net/pictures/40000/velka/question-mark.jpg" alt="game's image" width="10%", height="10%">
-                {% else %}
-                    <img src="{{ game.image_url }}" alt="game's image" width="10%", height="10%">
-                {% endif %}
-                {{ game.name }}
-                {{ game.category }}
-            </a>
-            {% if game.developer == request.user.profile or request.user.profile in game.owners.all %}
-                Owned
-            {% else %}
-                {{game.price}} €
-            {% endif %}
-        </li>
+            <div class="box">
+                <a class="game_link" href="{% url 'gamepage' gameid=game.id %}" style="text-decoration:none; color:black;">
+                    {% if not game.image_url %}
+                        <img src="http://www.publicdomainpictures.net/pictures/40000/velka/question-mark.jpg" alt="game's image" width="90%", height="90%">
+                    {% else %}
+                        <img src="{{ game.image_url }}" alt="game's image" width="90%", height="90%">
+                    {% endif %}
+                    <h2 class="game_info">
+                        {{ game.name }}
+                    </h2>
+                </a>
+                <div class="ownedStatus">
+                    {% if game.developer == request.user.profile or request.user.profile in game.owners.all %}
+                        <h5 style="color:black;">Owned</h5>
+                    {% else %}
+                        <h5 style="color:black;">{{game.price}} €</h5>
+                    {% endif %}
+                </div>
+            </div>
         {% endfor %}
-    </ul>
+    </SquareGrid>
     {% else %}
         <p>There are no games in the library.</p>
     {% endif %}
+
     {% if gameQSet.has_other_pages %}
-    <ul class="pagination">
-        {% if gameQSet.has_previous %}
-            <li><a href="?page={{ gameQSet.previous_page_number }}">&laquo;</a></li>
-        {% else %}
-            <li class="disabled"><span>&laquo;</span></li>
-        {% endif %}
-        {% for i in gameQSet.paginator.page_range %}
-            {% if gameQSet.number == i %}
-                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-            {% else %}
-                <li><a href="?page={{ i }}">{{ i }}</a></li>
-            {% endif %}
-        {% endfor %}
-        {% if gameQSet.has_next %}
-            <li><a href="?page={{ gameQSet.next_page_number }}">&raquo;</a></li>
-        {% else %}
-            <li class="disabled"><span>&raquo;</span></li>
-        {% endif %}
-    </ul>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if gameQSet.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ gameQSet.previous_page_number }}">Previous</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link">Previous</a>
+                    </li>
+                {% endif %}
+                {% for i in gameQSet.paginator.page_range %}
+                    {% if gameQSet.number == i %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                {% if gameQSet.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ gameQSet.next_page_number }}">Next</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
     {% endif %}
 
 {% endblock %}
