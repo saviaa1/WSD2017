@@ -27,12 +27,17 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "***REMOVED***"
-
+SOCIAL_AUTH_TWITTER_KEY = '***REMOVED***'
+SOCIAL_AUTH_TWITTER_SECRET = '***REMOVED***'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '***REMOVED***'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '***REMOVED***'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#DEFAULT REDIRECT AFTER USER LOGS IN
-LOGIN_REDIRECT_URL = ('..')
+#Settings for login via django login and social auth
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'index'
 
 # Application definition
 
@@ -53,6 +58,7 @@ INSTALLED_APPS = [
     'gamepage',
     'authentication',
     'developer',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -64,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'WSDProject2017.urls'
@@ -79,11 +86,21 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
             'debug': DEBUG,
         },
     },
 ]
+
+
+#Authentication backends for django social_django
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.twitter.TwitterOAuth',
+    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.google.GoogleOAuth2',
+)
 
 WSGI_APPLICATION = 'WSDProject2017.wsgi.application'
 

@@ -5,6 +5,10 @@ from developer.forms import AddGame
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
+from social_django.models import UserSocialAuth
+from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
 
 # Create your views here.
 @login_required
@@ -37,7 +41,23 @@ def deleting(request, object_id):
 
 @login_required
 def profile(request):
-    return render(request, 'profile.html')
+    user = request.user
+    try:
+        twitterLogin = user.social_auth.get(provider='twitter')
+    except UserSocialAuth.DoesNotExist:
+        twitterLogin = None
+
+    try:
+        googleLogin = user.social_auth.get(provider='google-oauth2')
+    except UserSocialAuth.DoesNotExist:
+        googleLogin = None
+
+    userCanLogout  = (user.social_auth.count() > 1 or user.has_usable_password())
+    return render(request, 'profile.html', {
+        'twitterLogin': twitterLogin,
+        'googleLogin': googleLogin,
+        'userCanLogout': userCanLogout,
+    })
 
 @login_required
 def editing(request, object_id):
@@ -57,3 +77,22 @@ def editing(request, object_id):
         return render(request, "adding.html", c)
     else:
         redirect(request, 'profile.html')
+
+@login_required
+def password(request):
+    if request.user.has_usable_password():
+        PasswordForm = PasswordChangeForm
+    else:
+        PasswordForm = AdminPasswordChangeForm
+    if request.method == 'POST':
+        form = PasswordForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.success(request, 'Password set')
+            return redirect('password')
+        else:
+            messages.error(request, 'An error occured')
+    else:
+        form = PasswordForm(request.user)
+    return render(request, 'password.html', {'form': form})

@@ -20,7 +20,11 @@
             {% endif %}
         </p>
   {% endfor %}
-  <button type="submit">Log in</button>
+  <button type="submit">Log in</button><br>
   <a href="{% url 'register' %}">If you don't have an account register here.</a>
 </form>
+<b>Or login using your social media accounts<b><br>
+<a href="{% url 'social:begin' 'twitter' %}">Login via Twitter</a><br>
+<a href="{% url 'social:begin' 'google-oauth2' %}">Login via Google</a><br>
+
 {% endif %}
