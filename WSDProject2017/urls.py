@@ -49,5 +49,7 @@ urlpatterns = [
     url(r'^(?P<object_id>[0-9]+)/edit_game/$', developerviews.editing, name='edit_game'),
     url(r'^oauth/', include('social_django.urls', namespace='social')),
     url(r'^profile/password/$', developerviews.password, name='password'),
+    url(r'^profile/(?P<object_id>[0-9]+)$', developerviews.statistics, name='statistics'),
+    
 
 ]

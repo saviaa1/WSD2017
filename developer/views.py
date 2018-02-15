@@ -9,6 +9,7 @@ from social_django.models import UserSocialAuth
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
+from payment.models import Purchase
 
 # Create your views here.
 @login_required
@@ -96,3 +97,18 @@ def password(request):
     else:
         form = PasswordForm(request.user)
     return render(request, 'password.html', {'form': form})
+
+
+@login_required
+def statistics(request, object_id):
+    game = Game.objects.get( id = object_id )
+    gameOwned = game.developer == request.user.profile
+    purchase = Purchase.objects.filter( gameid = object_id )
+    if gameOwned:
+        return render(request, 'statistics.html', {
+            'game': game,
+            'purchase': purchase
+
+    })
+    else:
+        return redirect('profile')

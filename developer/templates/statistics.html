@@ -1,0 +1,6 @@
+<p>Here's some statistics about your gamesales:</p>
+{% for p in purchase.all %}
+{% if p.gameid == game.id and p.success %}
+{{ p.date }}<br>
+{% endif %}
+{% endfor %}

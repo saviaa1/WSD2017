@@ -14,25 +14,25 @@ secret_key = "***REMOVED***"
 # Create your views here.
 @login_required(login_url="/login")
 def payments(request, gameid):
-    try: 
+    try:
         game = Game.objects.get( id = gameid )
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
-    
+
     purchase = Purchase(username = request.user, gameid = gameid)
     purchase.save()
-    
+
     amount = game.price;
     checksumstr = "pid={}&sid={}&amount={}&token={}".format(purchase.id, sid, amount, secret_key)
     m = md5(checksumstr.encode("ascii"))
     checksum = m.hexdigest()
-    
+
     return render(
         request,
         "payments.html",
         context={"pid":purchase.id, "sid":sid, "checksum":checksum, "game":game},
     )
-    
+
 @login_required(login_url="/login")
 def success(request):
     pid = request.GET.get('pid')
@@ -43,9 +43,11 @@ def success(request):
     m = md5(checksumstr.encode("ascii"))
     checksum2 = m.hexdigest()
     if checksum == checksum2:
-        try: 
+        try:
             purchase = Purchase.objects.get( id = pid )
             game = Game.objects.get( id = purchase.gameid )
+            purchase.success = True
+            purchase.save()
         except ObjectDoesNotExist:
             return HttpResponseNotFound()
         game.owners.add(request.user.profile)
@@ -56,10 +58,10 @@ def success(request):
         )
     else:
         return redirect('purchase/error', request=request)
-    
+
 def cancel(request):
     pid = request.GET.get('pid')
-    try: 
+    try:
         purchase = Purchase.objects.get( id = pid )
         game = Game.objects.get( id = purchase.gameid )
     except ObjectDoesNotExist:
@@ -68,11 +70,11 @@ def cancel(request):
         request,
         "cancel.html",
         context={"game":game},
-    )    
-    
+    )
+
 def error(request):
     pid = request.GET.get('pid')
-    try: 
+    try:
         purchase = Purchase.objects.get( id = pid )
         game = Game.objects.get( id = purchase.gameid )
     except ObjectDoesNotExist:

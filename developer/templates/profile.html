@@ -2,12 +2,10 @@
 {% if user.profile.developer and user.profile.games.all.count > 0 %}
 <p> Here are your games:</p>
 {% for p in user.profile.games.all %}
-    {{p.name}}
-    {{p.id}}
+    <a href="{% url 'statistics' object_id=p.id %}">{{p.name}}</a>
     <a href="{% url 'delete_game' object_id=p.id %}">delete</a>
     <a href="{% url 'edit_game' object_id=p.id %}">edit</a>
-    <p>Number of sales:</p>
-    {{ p.owners.count }}
+    <p>Number of sales: {{ p.owners.count }}</p><br>
 {% endfor %}
 {% endif %}
 <h1>Social settings<h1>
