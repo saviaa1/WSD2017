@@ -103,10 +103,27 @@ We will especially pay attention to testing the security of the software by atte
 ## FINAL SUMBMISSION
 
 ### Features we implemented
-**Meaningful testing:** 
 #### Mandatory requirements
+**Authentication:**  
+We didn't have any problems except having two different roles to register as so we implemented registering as a developer trough the user profile page.
+Otherwise we were successful with all other aspects of this feature so we would give ourselves 200 points.  
+**Basic player functionalities:**  
+**Basic developer functionalities:**  
+Only minor problems we had were thinking where we should handle the security restrictions. After we resolved that we were succesfull in all other requirements
+We implemented everything required well so we would give ourselves 200 points.  
+**Game/service interaction:**  
 #### Extra features
-
+**Save/load and resolution feature:**  
+**3rd party login:**  
+We didn't have any problems since the 3rd party Django app we used had good tutorials. Only minor problem was thinking how to de-link social media accounts and handle passwords.
+We implemented multiple sites and all requirements so we would give ourselves 200 points.  
+**RESTful API:**  
+Only problem was that the requirements given were a bit vague so it was hard to know how exactly you wanted us to implement this feature.
+Otherwise everything went well so we would give ourselves 100 points.  
+**Own game:**  
+**Mobile Friendly:**  
+**Social media sharing:**  
+Problem was with twitter that you can't get images unless your URL is approved to use "cards" so we had to use a regular tweet that has data about the game but no picture.  
 ### Division of work
-
+Tuomas implemented authentication, developer features, 3rd party login, RESTful API and social media sharing.
 ### How to use
