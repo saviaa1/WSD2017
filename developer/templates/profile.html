@@ -5,7 +5,8 @@
     <a href="{% url 'statistics' object_id=p.id %}">{{p.name}}</a>
     <a href="{% url 'delete_game' object_id=p.id %}">delete</a>
     <a href="{% url 'edit_game' object_id=p.id %}">edit</a>
-    <p>Number of sales: {{ p.owners.count }}</p><br>
+    <p>Number of sales: {{ p.owners.count }}</p>
+    <p>This game's ID: {{ p.id }}</p><br>
 {% endfor %}
 {% endif %}
 <h1>Social settings<h1>
@@ -42,7 +43,7 @@
 {% endif %}
 
 {% if not user.profile.developer %}
-<p>Click here to sign-up as a <a href="{% url 'developer' %}"developer</a></p>
+<p>Click here to register as a <a href="{% url 'developer' %}">developer</a></p>
 {% endif %}
 
 {% endblock %}
