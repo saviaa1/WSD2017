@@ -30,6 +30,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', homeviews.index, name='index'),
     path('gamelist/', gamelistviews.GameListView.as_view(), name='gamelist'),
+    path('gamelist/<category>/', gamelistviews.GameListView.as_view(), name='gamelist'),
     path('gamepage/<int:gameid>/', gamepageviews.gameviews, name='gamepage'),
     path('gamepage/<int:gameid>/loadgamedata/', gamepageviews.loadgamedata, name='loadgamedata'),
     path('purchase/<int:gameid>/', paymentviews.payments, name='purchase'),

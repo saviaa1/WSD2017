@@ -7,19 +7,34 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{game.name}}</h1>
-    <iframe id="game_iframe"
-        width="500"
-        height="300"
-        src="{{game.game_url}}"
-        sandbox="allow-scripts allow-modals"
-        <p>Your browser does not support iframes.</p>
-    </iframe> <!-- TODO: oikeudet -->
-    <ul id="game_highscore">
-        {% for score in highscores %}
-            <li> {{score.0}}: {{score.1}} </li>
-        {% endfor %}
-    </ul>
+    <h1 class="gameName">{{game.name}}</h1>
+    <div class="gamepageArena">
+        <div class="iframeAndScore">
+            <iframe id="game_iframe"
+                width="500"
+                height="300"
+                src="{{game.game_url}}"
+                sandbox="allow-scripts allow-modals"
+                <p>Your browser does not support iframes.</p>
+            </iframe>
+            {% if highscores %}
+                <h2 class="scoreTitle">Highscores:</h2>
+                <ol class="game_highscore">
+                    {% for score in highscores %}
+                        <li>{{score.0}}: {{score.1}}</li>
+                    {% endfor %}
+                </ol>
+            {% endif %}
+        </div>
+    </div>
+    {% if game.description %}
+        <div class="game_description">
+            <h2 class="descriptionTitle">Description:</h2>
+            <div class="desc">
+                <p>{{game.description}}</p>
+            </div>
+        </div>
+    {% endif %}
     {% csrf_token %}
     <script type="text/javascript">
         var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
@@ -27,12 +42,10 @@
         var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
         var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
         eventer(messageEvent,function(e) {
-            console.log(e.data);
             switch(e.data.messageType) {
                 case "SETTING":
                     var settingWidth = e.data.options.width;
                     var settingHeight = e.data.options.height;
-                    console.log(settingWidth, settingHeight);
                     document.getElementById("game_iframe").width = settingWidth;
                     document.getElementById("game_iframe").height = settingHeight;
                     break;

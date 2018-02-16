@@ -5,4 +5,4 @@ from django.forms import ModelForm
 class AddGame(ModelForm):
     class Meta:
         model = Game
-        fields = [ 'name', 'description', 'price', 'image_url', 'game_url', ]
+        fields = [ 'name', 'description', 'category', 'price', 'image_url', 'game_url', ]
