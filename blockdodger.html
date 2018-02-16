@@ -29,6 +29,8 @@
         const DOWN = 2;
         const LEFT = 3;
         
+        const defaultEnemySpawnCooldown = 750;
+        
         var gameArea = {
             canvas: document.createElement("canvas"),
             start: function() {
@@ -42,11 +44,8 @@
                 this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
             },
         }
-
-        var enemySpawnCooldown = 750;
-        
         // These variable track the state of this game
-        var player, enemies, score, enemySpawnTimer, time, gameOver;
+        var player, enemies, score, enemySpawnCooldown, enemySpawnTimer, time, gameOver;
     
         startGame();        
         
@@ -55,6 +54,7 @@
                 canvasWidth/2-playerWidth/2, canvasHeight/2-playerHeight/2, 0.2);
             enemies = [];
             score = 0;    
+            enemySpawnCooldown = defaultEnemySpawnCooldown;
             enemySpawnTimer = enemySpawnCooldown;
             time = new Date().getTime();
             gameOver = false;
@@ -122,9 +122,12 @@
         function updateGameArea() {
             if (gameOver) return;
             
+            //Calculate the time since last frame
             var currentTime = new Date().getTime();
             var deltatime = currentTime-time;
             time = currentTime;
+            if (deltatime > 500) return;
+            
             gameArea.clear();
             
             //Spawn new enemies
