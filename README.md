@@ -100,3 +100,13 @@ We will test all features manually as we develop them.
 In addition, we will test that everything works properly once the feature is complete.
 We will especially pay attention to testing the security of the software by attempting to circumvent the basic security, e.g. acquiring other user’s session/credentials, privilege escalation, injection attacks etc.
 
+## FINAL SUMBMISSION
+
+### Features we implemented
+**Meaningful testing:** 
+#### Mandatory requirements
+#### Extra features
+
+### Division of work
+
+### How to use
