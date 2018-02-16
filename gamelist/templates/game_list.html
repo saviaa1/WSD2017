@@ -1,13 +1,10 @@
 {% extends "base.html" %}
+
 {% block title %}
     <title>List of games</title>
 {% endblock %}
+
 {% block content %}
-<h1>Game shop asd</h1>
-
-    <p>Welcome to <em>asd</em>, a very basic game site.</p>
-
-    <h2>Game list</h2>
     {% if gameQSet %}
     <SquareGrid class="arena">
         {% for game in gameQSet %}

@@ -2,7 +2,7 @@ from django.http import HttpResponseNotFound, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.shortcuts import redirect
-from django.views.decorators.csrf import csrf_protect, csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
 import json
 from gamelist.models import Game
@@ -29,7 +29,6 @@ def gameviews(request, gameid):
         gameDataForUser = GameData.objects.get(game=game, player=request.user.profile)
     except ObjectDoesNotExist:
         gameDataForUser = GameData(player=request.user.profile, game=game)
-
 
     if request.method == "POST":
         jsonDATA = json.loads(request.POST['data'])
