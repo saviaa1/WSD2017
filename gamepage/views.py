@@ -40,15 +40,8 @@ def gameviews(request, gameid):
                 gameDataForUser.save()
 
         elif jsonDATA["messageType"] == "SAVE":
-            print(jsonDATA["gameState"])
-            gameDataForUser.gameState = str(jsonDATA["gameState"]).replace("\'", "\"")
+            gameDataForUser.gameState = json.dumps(jsonDATA["gameState"])
             gameDataForUser.save()
-
-        else:
-            print("if POST success, something inside failed")
-
-    else:
-        print("if POST fail")
 
     gameOwned = game.developer == request.user.profile
     if not gameOwned:
@@ -74,8 +67,5 @@ def loadgamedata(request, gameid):
         game = Game.objects.get(id=gameid)
         gameDataForUser = GameData.objects.get(game=game, player=request.user.profile)
     except ObjectDoesNotExist:
-        print("Return load error")
         return JsonResponse({"gameState": None})
-    print("Return load success")
-    print(gameDataForUser.gameState)
     return JsonResponse({"gameState": gameDataForUser.gameState})

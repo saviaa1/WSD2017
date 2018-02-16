@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Game</title>
+    <meta charset="utf-8"/>
+    <style>
+        canvas {
+            border:1px solid #d3d3d3;
+            background-color: #f1f1f1;
+        }
+    </style>
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script>
+    /* global $, alert */
+
+    $(document).ready( function() {
+        "use strict";
+        
+        const canvasWidth = 480;
+        const canvasHeight = 480;
+        
+        const playerWidth = 30;
+        const playerHeight = 30;
+        const enemyWidth = 25;
+        const enemyHeight = 25;
+        
+        const UP = 0;
+        const RIGHT = 1;
+        const DOWN = 2;
+        const LEFT = 3;
+        
+        var gameArea = {
+            canvas: document.createElement("canvas"),
+            start: function() {
+                this.canvas.width = canvasWidth;
+                this.canvas.height = canvasHeight;
+                this.context = this.canvas.getContext("2d");
+                document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+                this.interval = setInterval(updateGameArea, 20);
+            },
+            clear: function() {
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            },
+        }
+
+        var enemySpawnCooldown = 750;
+        
+        // These variable track the state of this game
+        var player, enemies, score, enemySpawnTimer, time, gameOver;
+    
+        startGame();        
+        
+        function startGame() {
+            player = new character(playerWidth, playerHeight, "green", 
+                canvasWidth/2-playerWidth/2, canvasHeight/2-playerHeight/2, 0.2);
+            enemies = [];
+            score = 0;    
+            enemySpawnTimer = enemySpawnCooldown;
+            time = new Date().getTime();
+            gameOver = false;
+            
+            gameArea.start();
+        }
+        function character(width, height, color, x, y, speed) {
+            this.width = width;
+            this.height = height;
+            this.color = color;
+            this.x = x;
+            this.y = y;
+            this.speed = speed;
+            this.direction = -1;
+            this.draw = function() {
+                const ctx = gameArea.context;
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+            }
+            this.move = function(deltatime) {
+                // Move character
+                if (this.direction === UP) {
+                    this.y -= this.speed*deltatime;
+                } else if (this.direction === RIGHT) {
+                    this.x += this.speed*deltatime;
+                    if (player.outsideGameArea()) {
+                        this.x -= canvasWidth + playerWidth;
+                    }
+                } else if (this.direction === DOWN) {
+                    this.y += this.speed*deltatime;
+                    if (player.outsideGameArea()) {
+                        this.y -= canvasHeight + playerHeight;
+                    }
+                } else if (this.direction === LEFT) {
+                    this.x -= this.speed*deltatime;
+                    if (player.outsideGameArea()) {
+                        this.x += canvasWidth + playerWidth;
+                    }
+                }
+            }
+            this.collidesWith = function(other) {
+                //Check if the rectangles overlap
+                return !((this.y + this.height < other.y) || (this.y > other.y + other.height) ||
+                        (this.x + this.width < other.x) || (this.x > other.x + other.width));
+            }
+            this.outsideGameArea = function() {
+                return !this.collidesWith({x: 0, y: 0, width: canvasWidth, height: canvasHeight});
+            }
+        }
+        function loadCharacter(characterVars) {
+            var new_character = new character(characterVars.width, characterVars.height, 
+                characterVars.color, characterVars.x, characterVars.y, characterVars.speed);
+            new_character.direction = characterVars.direction;
+            return new_character;
+        }
+         
+        function drawScore(text, width, height, color) {
+            const ctx = gameArea.context;
+            ctx.font = width + " " + height;
+            ctx.fillStyle = color;
+            const metrics = ctx.measureText(text);
+            ctx.fillText(text, canvasWidth - metrics.width - 20, 30);
+        }
+        
+        function updateGameArea() {
+            if (gameOver) return;
+            
+            var currentTime = new Date().getTime();
+            var deltatime = currentTime-time;
+            time = currentTime;
+            gameArea.clear();
+            
+            //Spawn new enemies
+            enemySpawnTimer -= deltatime;
+            if (enemySpawnTimer <= 0) {
+                enemySpawnTimer = enemySpawnCooldown;
+                const enemySpawnDirection = Math.floor(Math.random()*4);
+                var enemyX;
+                var enemyY;
+                var enemyDirection;
+                if (enemySpawnDirection === UP) {
+                    enemyY = -enemyHeight;
+                    enemyX = Math.floor(Math.random()*(canvasWidth-enemyWidth+1));
+                    enemyDirection = DOWN;
+                } else if (enemySpawnDirection === RIGHT) {
+                    enemyY = Math.floor(Math.random()*(canvasHeight-enemyHeight+1));
+                    enemyX = canvasWidth;
+                    enemyDirection = LEFT;
+                } else if (enemySpawnDirection === DOWN) {
+                    enemyY = canvasHeight;
+                    enemyX = Math.floor(Math.random()*(canvasWidth-enemyWidth+1));
+                    enemyDirection = UP;
+                } else if (enemySpawnDirection === LEFT) {
+                    enemyY = Math.floor(Math.random()*(canvasHeight-enemyHeight+1));;
+                    enemyX = -enemyWidth;
+                    enemyDirection = RIGHT
+                }
+                const enemy = new character(enemyWidth, enemyHeight, "red", enemyX, enemyY, 0.1);
+                enemy.direction = enemyDirection;
+                enemies.push(enemy);
+            }
+        
+            //When going outside of the game area, make player come out from the other side
+            player.move(deltatime);
+            if (player.outsideGameArea()) {
+                if (player.direction === UP) {
+                    player.y += canvasHeight + playerHeight;
+                } else if (this.direction === RIGHT) {
+                    player.x -= canvasWidth + playerWidth;
+                } else if (this.direction === DOWN) {
+                    player.y -= canvasHeight + playerHeight;
+                } else if (this.direction === LEFT) {
+                    player.x += canvasWidth + playerWidth;
+                }
+            }
+            //Move and draw enemies
+            for (var i = 0; i < enemies.length; i += 1) {
+                enemies[i].move(deltatime);
+                enemies[i].draw();
+                //Check collision with enemies
+                if (player.collidesWith(enemies[i])) {
+                    gameOver = true;
+                } 
+                // Delete enemies that go outside the game area
+                if (enemies[i].outsideGameArea()) {
+                    delete enemies[i];
+                }
+            }
+            enemies = enemies.filter(function( enemy ) {
+                return enemy !== undefined;
+            });
+            player.draw();
+            
+            //Increase score
+            score += deltatime/100;
+            const scoreText="SCORE: " + Math.floor(score);
+            drawScore(scoreText, "30px", "Consolas", "black");
+            
+            //Make enemies spawn faster
+            if (enemySpawnCooldown > 0) {
+                enemySpawnCooldown -= deltatime/100;
+            }
+            
+            if (gameOver) {
+                //Stop the game and submit score
+                clearInterval(gameArea.interval);
+                var msg = {
+                    "messageType": "SCORE",
+                    "score": score
+                };
+                window.parent.postMessage(msg, "*");
+            }
+        }
+        
+        // Record keyboard inputs
+        $(document).keydown(function(event){
+            switch(event.which) {
+                // Left or A
+                case 37:
+                case 65:
+                    player.direction = LEFT;
+                    break;
+                // Up or W
+                case 38:
+                case 87:
+                    player.direction = UP;
+                    break;
+                // Right or D
+                case 39:
+                case 68:
+                    player.direction = RIGHT;
+                    break;
+                // Down or S
+                case 40:
+                case 83:
+                    player.direction = DOWN;
+                    break;
+                    
+                default: return;
+            } 
+            event.preventDefault();
+        });
+
+        // Sends this game's state to the service.
+        // The format of the game state is decided
+        // by the game
+        $("#save").click( function () {
+            var msg = {
+                "messageType": "SAVE",
+                "gameState": {
+                    "player": player,
+                    "enemies": enemies,
+                    "enemySpawnCooldown": enemySpawnCooldown,
+                    "enemySpawnTimer": enemySpawnTimer, 
+                    "gameOver": gameOver,
+                    "score": score
+                }
+            };
+            var obj = JSON.parse(JSON.stringify(msg));
+            window.parent.postMessage(obj, "*");
+        });
+
+        // Sends a request to the service for a
+        // state to be sent, if there is one.
+        $("#load").click( function () {
+            var msg = {
+                "messageType": "LOAD_REQUEST",
+            };
+            window.parent.postMessage(msg, "*");
+        });
+
+        // Listen incoming messages, if the messageType
+        // is LOAD then the game state will be loaded.
+        //
+        // Also handles any errors that the service
+        // wants to send (displays them as an alert).
+        window.addEventListener("message", function(evt) {
+            if(evt.data.messageType === "LOAD") {
+                var playerVars = evt.data.gameState.player;
+                var enemyVarsList = evt.data.gameState.enemies;
+                enemySpawnCooldown = evt.data.gameState.enemySpawnCooldown;
+                enemySpawnTimer = evt.data.gameState.enemySpawnTimer;
+                gameOver = evt.data.gameState.gameOver;
+                score = evt.data.gameState.score;
+                player = loadCharacter(playerVars);
+                enemies = [];
+                for (var i = 0; i < enemyVarsList.length; i += 1) {
+                    enemies.push(loadCharacter(enemyVarsList[i]));
+                }
+                time = new Date().getTime();
+                gameArea.start();
+            } else if (evt.data.messageType === "ERROR") {
+                alert(evt.data.info);
+            }
+        });
+
+        $("#restart").click( function () {
+            startGame();
+        });
+
+        // Request the service to set the resolution of the
+        // iframe correspondingly
+        var message =    {
+            messageType: "SETTING",
+            options: {
+                "width": 500, //Integer
+                "height": 530 //Integer
+            }
+        };
+        window.parent.postMessage(message, "*");
+
+    });
+    </script>
+</head>
+<body>
+    <br>
+    <button id="restart">Restart Game</button>
+    <button id="save">Save</button>
+    <button id="load">Load</button>
+</body>
+</html>
