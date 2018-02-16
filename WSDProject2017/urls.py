@@ -23,6 +23,7 @@ from payment import views as paymentviews
 from authentication import views as authenticationviews
 from django.contrib.auth import views as django_authentication_views
 from developer import views as developerviews
+from api import views as apiviews
 
 urlpatterns = [
 
@@ -49,7 +50,10 @@ urlpatterns = [
     url(r'^(?P<object_id>[0-9]+)/edit_game/$', developerviews.editing, name='edit_game'),
     url(r'^oauth/', include('social_django.urls', namespace='social')),
     url(r'^profile/password/$', developerviews.password, name='password'),
-    url(r'^profile/(?P<object_id>[0-9]+)$', developerviews.statistics, name='statistics'),
-    
+    url(r'^profile/(?P<object_id>[0-9]+)/$', developerviews.statistics, name='statistics'),
+    url(r'^api/games/$', apiviews.games, name='games'),
+    url(r'^api/highscores/$', apiviews.highscores, name='highscores'),
+    url(r'^api/highscores/(?P<object_id>[0-9]+)/$', apiviews.highscoresPerGame, name='highscoresPerGame'),
+    url(r'^api/sales/(?P<object_id>[0-9]+)/$', apiviews.saleStatistics, name='saleStatistics'),
 
 ]
