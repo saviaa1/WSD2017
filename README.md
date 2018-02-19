@@ -108,11 +108,7 @@ We will especially pay attention to testing the security of the software by atte
 We didn't have any problems except having two different roles to register as so we implemented registering as a developer through the user profile page.
 Otherwise we were successful with all other aspects of this feature so we would give ourselves 200 points.  
 **Basic player functionalities:**  
-<<<<<<< HEAD
 We successfully implemented the payment service, security restrictions, game functionalities and categories for different games. 
-=======
-We successfully implemented the payment service, security restrictions, game functionalities and categories for different games.
->>>>>>> 086b41d72f5aadd7d9cc689ba4a7d8ea5ca85780
 Therefore, we would give ourselves 300 points.  
 **Basic developer functionalities:**  
 Only minor problems we had were thinking where we should handle the security restrictions. After we resolved that we were successful in all other requirements
