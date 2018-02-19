@@ -42,7 +42,7 @@ def register(request):
         'form': form,
         })
 
-
+#Activating new users using tokens and an email
 def activate(request, uidb64, token, backend='django.contrib.auth.backends.ModelBackend'):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
