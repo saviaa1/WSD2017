@@ -147,7 +147,7 @@ We feel that the division of work was successful and everyone did approximately 
 We also utilized pair programming for development at our weekly meetings.
 
 ### How to use
-The web application is deployed at [http://dry-crag-23081.herokuapp.com/](http://dry-crag-23081.herokuapp.com/)  
+The web application is deployed at [http://thawing-refuge-59858.herokuapp.com](http://thawing-refuge-59858.herokuapp.com)  
 Registering a new user requires email-authentication, but we use Django's Console Backend as advised in the project description.
 Threfore, instead of creating a new account, you may use the following accounts to test the service:  
 **Developers: (username, password)**  
