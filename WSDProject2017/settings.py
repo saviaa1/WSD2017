@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import os
 import dj_database_url
 
-
-
 # debugging email config for sending registration emails.
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
