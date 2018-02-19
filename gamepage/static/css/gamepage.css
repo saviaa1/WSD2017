@@ -8,46 +8,25 @@
     width: 70%;
     height: auto;
 }
-
-.game_description {
-    align-self: flex-start;
-    align-items: left !important;
-    text-align: left;
-    padding-top: 2%;
-    padding-left: 20%;
-    width: auto;
-    height: auto;
-}
-.descriptionTitle {
-    margin-bottom: 10px;
-}
-.desc {
-    border: 2px solid black;
-    background: #ddd;
-    width: auto;
-}
-.game_description p {
-    text-align: left;
-    width: auto;
-    margin: 10px;
-    padding: 10px;
-    font-size: 16px;
-    background: #eee;
-}
-
 .iframeAndScore {
     display: inline-block;
     clear: both;
     width: 100%;
     height: auto;
 }
-
 iframe {
     float: left;
     margin-right: 10%;
     -moz-box-shadow: 4px 4px 14px #000;
     -webkit-box-shadow: 4px 4px 14px #000;
     box-shadow: 4px 4px 14px #000;
+}
+
+.scoreTitle {
+    margin-top: 5%;
+    text-align: left;
+    font: 400 40px/1.5 Helvetica, Verdana, sans-serif;
+    padding: 0;
 }
 
 .game_highscore {
@@ -72,9 +51,37 @@ iframe {
   background: #f6f6f6;
 }
 
-.scoreTitle {
-    margin-top: 5%;
+
+
+
+.game_description {
+    align-self: flex-start;
+    align-items: left !important;
     text-align: left;
-    font: 400 40px/1.5 Helvetica, Verdana, sans-serif;
-    padding: 0;
+    padding-top: 2%;
+    padding-left: 20%;
+    width: auto;
+    height: auto;
+}
+.descriptionTitle {
+    margin-bottom: 10px;
+}
+.desc {
+    border: 2px solid black;
+    background: #ddd;
+    width: auto;
+}
+.desc p {
+    text-align: left;
+    width: auto;
+    margin: 10px;
+    padding: 10px;
+    font-size: 16px;
+    background: #eee;
+}
+
+
+
+.twitter-share-button {
+    margin: 2%;
 }

@@ -43,61 +43,61 @@
     {% endif %}
     {% csrf_token %}
     <script type="text/javascript">
-        var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
-        var eventer = window[eventMethod];
-        var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
         var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-        eventer(messageEvent,function(e) {
-            switch(e.data.messageType) {
-                case "SETTING":
-                    var settingWidth = e.data.options.width;
-                    var settingHeight = e.data.options.height;
-                    document.getElementById("game_iframe").width = settingWidth;
-                    document.getElementById("game_iframe").height = settingHeight;
-                    break;
-                case "LOAD_REQUEST":
-                    function csrfSafeMethod(method) {
-                        // these HTTP methods do not require CSRF protection
-                        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-                    }
-                    $.ajaxSetup({
-                        beforeSend: function(xhr, settings) {
-                            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                            }
+        const childWindow = document.getElementById("game_iframe").contentWindow;
+        window.addEventListener("message", e => {
+            if (e.source === childWindow ) {
+                switch(e.data.messageType) {
+                    case "SETTING":
+                        var settingWidth = e.data.options.width;
+                        var settingHeight = e.data.options.height;
+                        document.getElementById("game_iframe").width = settingWidth;
+                        document.getElementById("game_iframe").height = settingHeight;
+                        break;
+                    case "LOAD_REQUEST":
+                        function csrfSafeMethod(method) {
+                            // these HTTP methods do not require CSRF protection
+                            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
                         }
-                    });
-                    $.ajax({
-                        "type": "POST",
-                        "dataType": "json",
-                        "url": "./loadgamedata/",
-                        success: function(data) {
-                            var gameState = JSON.parse(data.gameState);
-                            if (gameState == null) {
-                                var message =  {
-                                    messageType: "ERROR",
-                                    info: "Gamestate could not be loaded"
-                                };
-                            } else {
-                                var message  = {
-                                    messageType: "LOAD",
-                                    gameState: gameState,
-                                };
+                        $.ajaxSetup({
+                            beforeSend: function(xhr, settings) {
+                                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                                }
                             }
-                            document.getElementById("game_iframe").contentWindow.postMessage(message, '*');
-                        },
-                    });
-                    break;
-                default:
-                    var postdata = {
-                        data: JSON.stringify(e.data),
-                        dataType: 'text',
-                        contentType: 'application/json; charset=utf-8',
-                        csrfmiddlewaretoken: csrftoken,
-                    };
-                    $.post("", postdata);
+                        });
+                        $.ajax({
+                            "type": "POST",
+                            "dataType": "json",
+                            "url": "./loadgamedata/",
+                            success: function(data) {
+                                var gameState = JSON.parse(data.gameState);
+                                if (gameState == null) {
+                                    var message =  {
+                                        messageType: "ERROR",
+                                        info: "Gamestate could not be loaded"
+                                    };
+                                } else {
+                                    var message  = {
+                                        messageType: "LOAD",
+                                        gameState: gameState,
+                                    };
+                                }
+                                document.getElementById("game_iframe").contentWindow.postMessage(message, '*');
+                            },
+                        });
+                        break;
+                    default:
+                        var postdata = {
+                            data: JSON.stringify(e.data),
+                            dataType: 'text',
+                            contentType: 'application/json; charset=utf-8',
+                            csrfmiddlewaretoken: csrftoken,
+                        };
+                        $.post("", postdata);
+                }
             }
-        },false);
+        });
 
     <!-- Twitter Button -->
     </script>

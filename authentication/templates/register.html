@@ -1,23 +1,29 @@
+{% extends "base.html" %}
 
-{% if user.is_authenticated %}
-    <p>Log out if you want to register another account.</p>
-{% else %}
-    <h2>Sign up</h2>
-    <form method="post">
-        {% csrf_token %}
-        {% for field in form %}
-            <p>
-                {{ field.label_tag }}<br>
-                {{ field }}
-                {% if field.help_text %}
-                    <small style="color: grey">{{ field.help_text }}</small>
-                {% endif %}
-                {% for error in field.errors %}
-                    <p style="color: red">{{ error }}</p>
-                {% endfor %}
-            </p>
-        {% endfor %}
-        <button type="submit">Sign up</button>
-    </form>
+{% block title %}
+    <title>Registration</title>
+{% endblock %}
 
-{% endif %}
+{% block content %}
+    {% if user.is_authenticated %}
+        <p>Log out if you want to register another account.</p>
+    {% else %}
+        <h2>Sign up</h2>
+        <form class="registerForm" method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <p>
+                    {{ field.label_tag }}<br>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <sup>{{ field.help_text }}</sup>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <p style="color: red">{{ error }}</p>
+                    {% endfor %}
+                </p>
+            {% endfor %}
+            <button type="submit">Sign up</button>
+        </form>
+    {% endif %}
+{% endblock %}

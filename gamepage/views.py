@@ -31,6 +31,7 @@ def gameviews(request, gameid):
         gameDataForUser = GameData(player=request.user.profile, game=game)
 
     if request.method == "POST":
+        print("POST dshfkdhfkd")
         jsonDATA = json.loads(request.POST['data'])
         if jsonDATA["messageType"] == "SCORE":
             score = float(jsonDATA["score"])

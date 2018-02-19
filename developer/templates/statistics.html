@@ -1,6 +1,14 @@
-<p>Here's some statistics about your gamesales:</p>
-{% for p in purchase.all %}
-{% if p.gameid == game.id and p.success %}
-{{ p.date }}<br>
-{% endif %}
-{% endfor %}
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Statistic</title>
+{% endblock %}
+
+{% block content %}
+    <p>Here's some statistics about your gamesales:</p>
+    {% for p in purchase.all %}
+        {% if p.gameid == game.id and p.success %}
+            {{ p.date }}<br>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

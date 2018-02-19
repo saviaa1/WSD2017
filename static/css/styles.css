@@ -1,3 +1,4 @@
+/* base.html */
 .content {
     width: 100%;
     padding: 2em 3em 2em 3em;
@@ -9,14 +10,39 @@
     justify-content: center;
 }
 
+/* authentication/regsiter.html */
+.registerForm {
+    width: 50%;
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+/* developer/profile.html */
+.profileListOfGames {
+    width: 50%;
+    text-align: center;
+    align-items: flex-start;
+}
+.becomindDev {
+    margin: 1%;
+}
+
+/* developer/adding.html */
+.addGame {
+    width: 20%;
+    height: auto;
+    display: grid;
+    text-align: left;
+}
+
+/* gamelist/game_list.html */
 .arena {
     align-items: center;
     --content-width: 80vw;
     --gutter: 40px;
-    --row-size: calc(
-        ( var(--content-width) - (var(--gutter) * (var(--columns) - 1))
-        ) / var(--columns)
-    );
+    --row-size: calc((var(--content-width)-(var(--gutter)*(var(--columns) - 1))) /
+        var(--columns));
     display: grid;
     width: 60%;
     max-width: var(--content-width);
@@ -25,30 +51,28 @@
     grid-column-gap: var(--gutter);
     grid-row-gap: var(--gutter);
 }
-
 .game_info {
     padding-top: 3%;
     padding-bottom: 0%;
 }
-
 .ownedStatus {
     padding-top: 0%;
     padding-bottom: 3%;
     text-align: center;
 }
 
+
+/* Sets how many columns in game_list page has according to screenwidth */
 @media (min-width: 450px){
   SquareGrid{
     --columns: 1;
   }
 }
-
 @media (min-width: 750px){
   SquareGrid{
     --columns: 2;
   }
 }
-
 @media (min-width: 1200px){
   SquareGrid{
     --columns: 3;
