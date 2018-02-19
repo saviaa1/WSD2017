@@ -10,7 +10,7 @@
     {% endif %}
     {% if user.profile.developer and user.profile.games.all.count > 0 %}
         <p> Here are your games:</p>
-        <div class="listOfGames">
+        <div class="profileListOfGames">
             {% for p in user.profile.games.all %}
                 <a href="{% url 'statistics' object_id=p.id %}">{{p.name}}</a>
                 <a href="{% url 'delete_game' object_id=p.id %}">delete</a>
