@@ -8,8 +8,8 @@
 ### 2. Goal
 
 Goal of the project is an online game store for JavaScript games.
-The service has two types of users: players and developers. 
-Developers can add their games to the service and set a price for it. 
+The service has two types of users: players and developers.
+Developers can add their games to the service and set a price for it.
 Players can buy games on the platform and then play purchased games online.
 
 
@@ -40,7 +40,7 @@ Find games:
 Finding games is made easy for the user by grouping the games by category.  
 
 Security restrictions:  
-We will ensure that the player is only allowed to play the games they’ve purchased. 
+We will ensure that the player is only allowed to play the games they’ve purchased.
 This is done by storing the purchased games for each user in the database and by comparing the django model to see if they allowed access.  
 
 **Basic developer functionalities**  
@@ -48,8 +48,8 @@ Add game, set price and manage game:
 New games are added to the inventory by giving the price and a link to an URL of the game, which is an HTML file that is displayed in an iframe to the player.
 The games can be managed on a separate page which allows removal and price changes.
 
-Basic game inventory and sales statistics: 
-The developers will be able to see how many of the developers' games have been bought and when. 
+Basic game inventory and sales statistics:
+The developers will be able to see how many of the developers' games have been bought and when.
 This is implemented by storing each purchase in the database.  
 
 Security restrictions:  
@@ -58,14 +58,14 @@ This is done by storing all the owned games for each developer in the database a
 
 **Game/service interaction**  
 postMessage interaction:  
-The game/service interaction is implemented using a simple message system with JSON data. 
-Game and the game service communicate with window.postMessage. 
+The game/service interaction is implemented using a simple message system with JSON data.
+Game and the game service communicate with window.postMessage.
 All the messages contain a messageType attribute, which are implemented as outlined in the project guide.
 
 #### 3.3 Django models
 
-We will have models for players, developers, games and purchases. 
-The player and developer models will be extended from the existing Django user model. 
+We will have models for players, developers, games and purchases.
+The player and developer models will be extended from the existing Django user model.
 The players will have fields for their login information and relations to the games they have bought.
 The developers will have fields for their login information and relations to the games they manage.
 The games will have fields for their information and information related to their sales.
@@ -83,7 +83,7 @@ We plan to have the minimun requirements completed by 4.2.2018 and after that we
 
 #### 4.1 Work methods
 
-We will use the git as a project management tool. 
+We will use the git as a project management tool.
 We have a telegram group set-up for communication between team members and we are meeting face-to-face every tuesday.
 
 ### 5. Quality of work
@@ -95,8 +95,8 @@ In addition, we will be reviewing each other's code.
 **User experience:**  
 We aim to make the user interface intuitive and clean. We also plan to ask for input from people outside the project.  
 
-**Meaningful testing:** 
-We will test all features manually as we develop them. 
+**Meaningful testing:**
+We will test all features manually as we develop them.
 In addition, we will test that everything works properly once the feature is complete.
 We will especially pay attention to testing the security of the software by attempting to circumvent the basic security, e.g. acquiring other user’s session/credentials, privilege escalation, injection attacks etc.
 
@@ -108,14 +108,17 @@ We will especially pay attention to testing the security of the software by atte
 We didn't have any problems except having two different roles to register as so we implemented registering as a developer through the user profile page.
 Otherwise we were successful with all other aspects of this feature so we would give ourselves 200 points.  
 **Basic player functionalities:**  
-We successfully implemented the payment service, security restrictions, game functionalities and categories for different games. 
+We successfully implemented the payment service, security restrictions, game functionalities and categories for different games.
 Therefore, we would give ourselves 300 points.  
 **Basic developer functionalities:**  
 Only minor problems we had were thinking where we should handle the security restrictions. After we resolved that we were successful in all other requirements
 We implemented everything required well so we would give ourselves 200 points.  
 **Game/service interaction:**  
 We had no major problems implementing the game/service interaction for saving high scores as well as save/load features including messages from the service to the game.
-The game/service interaction works well and satisfies all requirements. Thus, we would give ourselves 200 points for this.
+The game/service interaction works well and satisfies all requirements. Thus, we would give ourselves 200 points for this.  
+**Deploying to Heroku**  
+Surprisingly this was perhaps one of the more challenging parts of the project. Even thou we started doing this project from Django's Heroku template we still had problems deploying it.
+The problems were mainly how to migrate local database to Heroku. Eventually we did succeed on this.
 #### Extra features
 **Save/load and resolution feature:**  
 Initially, we had some problems saving JavaScipt objects properly to the database.
@@ -162,5 +165,6 @@ The users can gain developer status through the profile page.
 The games can be browsed and grouped by category using the top bar.
 When logged in, the users may purchase games or play owned games from the game list.
 Some browsers, for example Google Chrome, may prevent loading the HTTP content for games or payment service over HTTPS.
-If this happens, the content can be loaded by changing the url from HTTPS to HTTP or accepting the unprotected sources. 
-Developers can add, modify and delete their games from the profile page.
+If this happens, the content can be loaded by changing the url from HTTPS to HTTP or accepting the unprotected sources.
+Developers can add, modify and delete their games from the profile page.  
+You can connect to your social media trough the profile page.  
