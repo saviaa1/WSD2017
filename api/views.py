@@ -11,27 +11,29 @@ from django.contrib.auth.decorators import login_required
 
 
 
-# Create your views here.
 
+#Gets all the games from the site
 def games(request):
     if request.method == 'GET':
         gameObjects = Game.objects.all()
         gameSerialized = serializers.serialize('json', gameObjects)
         return JsonResponse(gameSerialized, safe=False)
 
-
+#Gets all highscores
 def highscores(request):
     if request.method == 'GET':
         gameDataObjects = GameData.objects.all()
         gameDataSerialized = serializers.serialize('json', gameDataObjects)
         return JsonResponse(gameDataSerialized, safe=False)
 
+#Gets all highscores based on game requested
 def highscoresPerGame(request, object_id):
     if request.method == 'GET':
         gameDataObjects = GameData.objects.all().filter(game = object_id).order_by('highscore')
         gameDataSerialized = serializers.serialize('json', gameDataObjects)
         return JsonResponse(gameDataSerialized, safe=False)
 
+#Gets all sales per game to the developer that added the game
 @login_required
 def saleStatistics(request, object_id):
     isDeveloper = request.user.profile.developer

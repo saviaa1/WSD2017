@@ -3,11 +3,11 @@
     <title>{{game.name}}</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/gamepage.css' %}">
-    <meta name=”twitter:card” content={{game.description}} />
-    <meta name=”twitter:site” content={{request.build_absolute_uri}}/>
-    <meta name=”twitter:title” content={{game.name}} />
-    <meta name=”twitter:description” content={{game.description}} />
-    <meta name=”twitter:image” content={{game.image_url}} />
+    <meta name=”twitter:card” content=”Check out this awesome game!” />
+    <meta name=”twitter:site” content="{{request.build_absolute_uri}}" />
+    <meta name=”twitter:title” content="{{game.name}}" />
+    <meta name=”twitter:description” content=”{{game.description}}” />
+    <meta name=”twitter:image” content=”{{game.image_url}}” />
 {% endblock %}
 
 {% block content %}
