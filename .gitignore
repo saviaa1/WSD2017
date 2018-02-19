@@ -10,6 +10,3 @@ gamepage/__pycache__/
 gamepage/static/css/migrations/
 
 db.sqlite3
-gamelist/migrations/
-
-gamepage/migrations/

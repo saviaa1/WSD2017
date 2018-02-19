@@ -1,52 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Profile</title>
+{% endblock %}
+
 {% block content %}
-{% if user.profile.developer %}
-<p>Click <a href="{% url 'adding' %}">here</a> to add a game.</p>
-{% endif %}
-{% if user.profile.developer and user.profile.games.all.count > 0 %}
-<p> Here are your games:</p>
-{% for p in user.profile.games.all %}
-    <a href="{% url 'statistics' object_id=p.id %}">{{p.name}}</a>
-    <a href="{% url 'delete_game' object_id=p.id %}">delete</a>
-    <a href="{% url 'edit_game' object_id=p.id %}">edit</a>
-    <p>Number of sales: {{ p.owners.count }}</p>
-    <p>This game's ID: {{ p.id }}</p><br>
-{% endfor %}
-{% endif %}
-<h1>Social settings<h1>
-<h2>Twitter</h2>
-{% if twitterLogin %}
-  <p>Connected as @{{ twitterLogin.extra_data.access_token.screen_name }}</a></p>
-  {% if userCanLogout %}
-    <form method="post" action="{% url 'social:disconnect' 'twitter' %}">
-      {% csrf_token %}
-      <button type="submit">Disconnect</button>
-    </form>
-  {% else %}
-    <button type="button" disabled>Disconnect</button>
-    <p style="color: red">You must define<a href="{% url 'password' %}"> a password</a> for your account before you can disconnect</p>
-  {% endif %}
-{% else %}
-  <a href="{% url 'social:begin' 'twitter' %}">Connect</a>
-{% endif %}
+    {% if user.profile.developer %}
+    <p>Click <a href="{% url 'adding' %}">here</a> to add a game.</p>
+    {% endif %}
+    {% if user.profile.developer and user.profile.games.all.count > 0 %}
+        <p> Here are your games:</p>
+        <div class="profileListOfGames">
+            {% for p in user.profile.games.all %}
+                <a href="{% url 'statistics' object_id=p.id %}">{{p.name}}</a>
+                <a href="{% url 'delete_game' object_id=p.id %}">delete</a>
+                <a href="{% url 'edit_game' object_id=p.id %}">edit</a>
+                <p>Number of sales: {{ p.owners.count }}</p>
+                <p>This game's ID: {{ p.id }}</p><br>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <h1>Social settings<h1>
+    <h2>Twitter</h2>
+    {% if twitterLogin %}
+      <p>Connected as @{{ twitterLogin.extra_data.access_token.screen_name }}</a></p>
+      {% if userCanLogout %}
+        <form method="post" action="{% url 'social:disconnect' 'twitter' %}">
+          {% csrf_token %}
+          <button type="submit">Disconnect</button>
+        </form>
+      {% else %}
+        <button type="button" disabled>Disconnect</button>
+        <p style="color: red">You must define<a href="{% url 'password' %}"> a password</a> for your account before you can disconnect</p>
+      {% endif %}
+    {% else %}
+      <a href="{% url 'social:begin' 'twitter' %}">Connect</a>
+    {% endif %}
 
-<h2>Google</h2>
-{% if googleLogin %}
-  <p>Connected as {{ user.username }}</a></p>
-  {% if userCanLogout %}
-    <form method="post" action="{% url 'social:disconnect' 'google-oauth2' %}">
-      {% csrf_token %}
-      <button type="submit">Disconnect</button>
-    </form>
-  {% else %}
-    <button type="button" disabled>Disconnect</button>
-    <p style="color: red">You must define<a href="{% url 'password' %}"> a password</a> for your account before you can disconnect</p>
-  {% endif %}
-{% else %}
-  <a href="{% url 'social:begin' 'google-oauth2' %}">Connect</a>
-{% endif %}
+    <h2>Google</h2>
+    {% if googleLogin %}
+      <p>Connected as {{ user.username }}</a></p>
+      {% if userCanLogout %}
+        <form method="post" action="{% url 'social:disconnect' 'google-oauth2' %}">
+          {% csrf_token %}
+          <button type="submit">Disconnect</button>
+        </form>
+      {% else %}
+        <button type="button" disabled>Disconnect</button>
+        <p style="color: red">You must define<a href="{% url 'password' %}"> a password</a> for your account before you can disconnect</p>
+      {% endif %}
+    {% else %}
+      <a href="{% url 'social:begin' 'google-oauth2' %}">Connect</a>
+    {% endif %}
 
-{% if not user.profile.developer %}
-<p>Click here to register as a <a href="{% url 'developer' %}">developer</a></p>
-{% endif %}
-
+    {% if not user.profile.developer %}
+        <div class="becomindDev">
+            <p>Click here to register as a <a href="{% url 'developer' %}">developer</a></p>
+        </div>
+    {% endif %}
 {% endblock %}

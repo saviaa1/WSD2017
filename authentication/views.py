@@ -14,8 +14,9 @@ from authentication.models import Profile
 
 
 @login_required
-def debug(request):
-    return render(request, 'debug.html')
+def emailsuccess(request):
+    return render(request, 'emailsuccess.html')
+
 
 #View for registering new users
 def register(request):
@@ -54,7 +55,7 @@ def activate(request, uidb64, token, backend='django.contrib.auth.backends.Model
         user.profile.email_confirmed = True
         user.save()
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-        return redirect('debug')
+        return redirect('emailsuccess')
     else:
         return render(request, 'authInvalid.html')
 
