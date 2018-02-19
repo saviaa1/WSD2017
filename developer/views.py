@@ -79,6 +79,7 @@ def editing(request, object_id):
     else:
         redirect(request, 'profile.html')
 
+#View to handle social_auth accounts that they don't get locked out of the site
 @login_required
 def password(request):
     if request.user.has_usable_password():

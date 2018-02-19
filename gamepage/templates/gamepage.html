@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-<meta property="og:url"           content="{{request.build_absolute_uri}}" />
-<meta property="og:type"          content="website" />
-<meta property="og:title"         content="{{game.name}}" />
-<meta property="og:description"   content="{{game.description}}" />
-<meta property="og:image"         content="{{game.image_url}}" />
+<meta name=”twitter:card” content={{game.description}} />
+<meta name=”twitter:site” content={{request.build_absolute_uri}}/>
+<meta name=”twitter:title” content={{game.name}} />
+<meta name=”twitter:description” content={{game.description}} />
+<meta name=”twitter:image” content={{game.image_url}} />
 
 
 {% block title %}
@@ -105,7 +105,7 @@
       href="https://twitter.com/share"
       data-size="large"
       data-text="Check out this cool game {{game.name}}"
-      data-url="{{ request.build_absolute_uri }}"
+      data-url={{request.build_absolute_uri}}
       data-hashtags="ASDGameStore"
       data-related="twitterapi,twitter">
     Tweet
