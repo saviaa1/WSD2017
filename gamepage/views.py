@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 import json
 from gamelist.models import Game
 from gamepage.models import GameData
+import math
 
 # Create your views here.
 
@@ -22,7 +23,7 @@ def gameviews(request, gameid):
         gameData = GameData.objects.filter(game=game).order_by("-highscore")
         highscores = []
         for i in range(min(5, len(gameData))):
-            highscores.append((gameData[i].player.user, gameData[i].highscore))
+            highscores.append((gameData[i].player.user, math.floor(gameData[i].highscore)))
     except ObjectDoesNotExist:
         highscores = []
     try:
