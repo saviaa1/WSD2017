@@ -33,54 +33,63 @@ def payments(request, gameid):
         context={"pid":purchase.id, "sid":sid, "checksum":checksum, "game":game},
     )
 
+# Payment successful
 @login_required(login_url="/login")
 def success(request):
-    pid = request.GET.get('pid')
-    ref = request.GET.get('ref')
-    result = request.GET.get('result')
-    checksum = request.GET.get('checksum')
-    checksumstr = "pid={}&ref={}&result={}&token={}".format(pid, ref, result, secret_key)
-    m = md5(checksumstr.encode("ascii"))
-    checksum2 = m.hexdigest()
-    if checksum == checksum2:
+    if request.method == "GET":
+        pid = request.GET.get('pid')
+        ref = request.GET.get('ref')
+        result = request.GET.get('result')
+        checksum = request.GET.get('checksum')
+        checksumstr = "pid={}&ref={}&result={}&token={}".format(pid, ref, result, secret_key)
+        m = md5(checksumstr.encode("ascii"))
+        checksum2 = m.hexdigest()
+        if checksum == checksum2:
+            try:
+                purchase = Purchase.objects.get( id = pid )
+                game = Game.objects.get( id = purchase.gameid )
+                purchase.success = True
+                purchase.save()
+            except ObjectDoesNotExist:
+                return HttpResponseNotFound()
+            game.owners.add(request.user.profile)
+            return render(
+                request,
+                "success.html",
+                context={"game":game},
+            )
+        else:
+            return redirect('purchase/error', request=request)
+    return HttpResponseNotFound()
+
+# Payment canceled
+def cancel(request):
+    if request.method == "GET":
+        pid = request.GET.get('pid')
         try:
             purchase = Purchase.objects.get( id = pid )
             game = Game.objects.get( id = purchase.gameid )
-            purchase.success = True
-            purchase.save()
         except ObjectDoesNotExist:
             return HttpResponseNotFound()
-        game.owners.add(request.user.profile)
         return render(
             request,
-            "success.html",
+            "cancel.html",
             context={"game":game},
         )
-    else:
-        return redirect('purchase/error', request=request)
+    return HttpResponseNotFound()
 
-def cancel(request):
-    pid = request.GET.get('pid')
-    try:
-        purchase = Purchase.objects.get( id = pid )
-        game = Game.objects.get( id = purchase.gameid )
-    except ObjectDoesNotExist:
-        return HttpResponseNotFound()
-    return render(
-        request,
-        "cancel.html",
-        context={"game":game},
-    )
-
+# Payment error
 def error(request):
-    pid = request.GET.get('pid')
-    try:
-        purchase = Purchase.objects.get( id = pid )
-        game = Game.objects.get( id = purchase.gameid )
-    except ObjectDoesNotExist:
-        return HttpResponseNotFound()
-    return render(
-        request,
-        "error.html",
-        context={"game":game},
-    )
+    if request.method == "GET":
+        pid = request.GET.get('pid')
+        try:
+            purchase = Purchase.objects.get( id = pid )
+            game = Game.objects.get( id = purchase.gameid )
+        except ObjectDoesNotExist:
+            return HttpResponseNotFound()
+        return render(
+            request,
+            "error.html",
+            context={"game":game},
+        )
+    return HttpResponseNotFound()

@@ -30,6 +30,7 @@ def gameviews(request, gameid):
     except ObjectDoesNotExist:
         gameDataForUser = GameData(player=request.user.profile, game=game)
 
+    # Handle messages from the game
     if request.method == "POST":
         jsonDATA = json.loads(request.POST['data'])
         if jsonDATA["messageType"] == "SCORE":
@@ -42,6 +43,7 @@ def gameviews(request, gameid):
             gameDataForUser.gameState = json.dumps(jsonDATA["gameState"])
             gameDataForUser.save()
 
+    # Check if the user has developed or purchased the game
     gameOwned = game.developer == request.user.profile
     if not gameOwned:
         owners = game.owners.all()
@@ -62,6 +64,7 @@ def gameviews(request, gameid):
 @csrf_protect
 @login_required(login_url="/login")
 def loadgamedata(request, gameid):
+    # Load game state from save
     try:
         game = Game.objects.get(id=gameid)
         gameDataForUser = GameData.objects.get(game=game, player=request.user.profile)
