@@ -17,12 +17,12 @@
     <div class="gamepageArena">
         <div class="iframeAndScore">
             <iframe id="game_iframe"
+                name="iframe"
                 width="500"
                 height="300"
                 src="{{game.game_url}}"
                 sandbox="allow-scripts allow-modals"
-                <p>Your browser does not support iframes.</p>
-            </iframe>
+            ></iframe>
             {% if highscores %}
                 <h2 class="scoreTitle">Highscores:</h2>
                 <ol class="game_highscore">
@@ -42,7 +42,7 @@
         </div>
     {% endif %}
     {% csrf_token %}
-    <script language="javascript">
+    <script>
         function csrfSafeMethod(method) {
             // these HTTP methods do not require CSRF protection
             return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
@@ -76,9 +76,9 @@
                                         info: "Gamestate could not be loaded"
                                     };
                                 } else {
-                                    var message  = {
+                                    var message = {
                                         messageType: "LOAD",
-                                        gameState: gameState,
+                                        gameState: gameState
                                     };
                                 }
                                 document.getElementById("game_iframe").contentWindow.postMessage(message, '*');
@@ -107,7 +107,7 @@
       data-related="twitterapi,twitter">
     Tweet
     </a>
-    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <script async src="https://platform.twitter.com/widgets.js"></script>
 
 
 
