@@ -54,6 +54,7 @@ def profile(request):
     except UserSocialAuth.DoesNotExist:
         googleLogin = None
 
+    #If user has more than one social accounts or a password they are allowed to logout
     userCanLogout = (user.social_auth.count() > 1 or user.has_usable_password())
     return render(request, 'profile.html', {
         'twitterLogin': twitterLogin,

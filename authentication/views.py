@@ -12,7 +12,7 @@ from authentication.forms import Registration
 from authentication.tokens import authenticationToken
 from authentication.models import Profile
 
-
+#View for telling verification was successful
 @login_required
 def emailsuccess(request):
     return render(request, 'emailsuccess.html')
@@ -54,6 +54,7 @@ def activate(request, uidb64, token, backend='django.contrib.auth.backends.Model
         user.is_active = True
         user.profile.email_confirmed = True
         user.save()
+        #Using django console backend
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('emailsuccess')
     else:
