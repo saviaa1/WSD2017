@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
+    <h2>Welcome {{ user }}</h2>
     {% if user.profile.developer %}
     <p>Click <a href="{% url 'adding' %}">here</a> to add a game.</p>
     {% endif %}
