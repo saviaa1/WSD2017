@@ -105,15 +105,22 @@ We will especially pay attention to testing the security of the software by atte
 ### Features we implemented
 #### Mandatory requirements
 **Authentication:**  
-We didn't have any problems except having two different roles to register as so we implemented registering as a developer trough the user profile page.
+We didn't have any problems except having two different roles to register as so we implemented registering as a developer through the user profile page.
 Otherwise we were successful with all other aspects of this feature so we would give ourselves 200 points.  
 **Basic player functionalities:**  
+We successfully implemented the payment service, security restrictions, game functionalities and categories for different games. 
+Therefore, we would give ourselves 300 points.
 **Basic developer functionalities:**  
-Only minor problems we had were thinking where we should handle the security restrictions. After we resolved that we were succesfull in all other requirements
+Only minor problems we had were thinking where we should handle the security restrictions. After we resolved that we were successful in all other requirements
 We implemented everything required well so we would give ourselves 200 points.  
 **Game/service interaction:**  
+We had no major problems implementing the game/service interaction for saving high scores as well as save/load features including messages from the service to the game.
+The game/service interaction works well and satisfies all requirements. Thus, we would give ourselves 200 points for this.
 #### Extra features
 **Save/load and resolution feature:**  
+Initially, we had some problems saving JavaScipt objects properly to the database.
+Eventually, we found the solutions, and the game state can be saved to the server using a save button, and the game can be continued from the save using the load button.
+As this works well and fulfills all requirements, we would give ourselves 100 points.
 **3rd party login:**  
 We didn't have any problems since the 3rd party Django app we used had good tutorials. Only minor problem was thinking how to de-link social media accounts and handle passwords.
 We implemented multiple sites and all requirements so we would give ourselves 200 points.  
@@ -121,9 +128,31 @@ We implemented multiple sites and all requirements so we would give ourselves 20
 Only problem was that the requirements given were a bit vague so it was hard to know how exactly you wanted us to implement this feature.
 Otherwise everything went well so we would give ourselves 100 points.  
 **Own game:**  
+We implemented a nice simple JavaScript game that communicates with the service for high scores, as well as saving and loading from a save.
+We would give ourselves 100 points for this.
 **Mobile Friendly:**  
+Our web application is mobile friendly, as the top bars and game lists we made to dynamically adjust to varying game sizes.
+However, mobile users might not be able to play some games, if the game developer has not created the game to be mobile friendly.
+Other than that, our website is usable on mobile devices, and we would give ourselves 50 points for this.
 **Social media sharing:**  
 Problem was with twitter that you can't get images unless your URL is approved to use "cards" so we had to use a regular tweet that has data about the game but no picture.  
+Otherwise the social media sharing feature works well so we would give ourselves 50 points.
+
 ### Division of work
 Tuomas implemented authentication, developer features, 3rd party login, RESTful API and social media sharing.
+Iiro implemented most basic player functionalities, payment service and own game as well as handled heroku deployment.
+Alex implemented game list, game page, game/service interaction and templates.
+
+We feel that the division of work was successful and everyone did approximately the same amount of work.
+We also utilized pair programming for development at our weekly meetings.
+
 ### How to use
+The web application is deployed at https://powerful-hamlet-41538.herokuapp.com/
+Registering a new user requires email-authentication, but we use Django's Console Backend as advised in the project description.
+Threfore, instead of creating a new account, you may use the following accounts to test the service:  
+**Developers: (username, password)**  
+**Users: (username, password)**  
+The users can gain developer status through the profile page.
+The games can be browsed and grouped by category using the top bar.
+When logged in, the users may purchase games or play owned games from the game list.
+Developers can add, modify and delete their games from the profile page.

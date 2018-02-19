@@ -32,7 +32,7 @@ SOCIAL_AUTH_TWITTER_SECRET = '***REMOVED***'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '***REMOVED***'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '***REMOVED***'
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 #Settings for login via django login and social auth
 LOGIN_URL = 'login'
