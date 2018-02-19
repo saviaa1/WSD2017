@@ -56,5 +56,4 @@ urlpatterns = [
     url(r'^api/highscores/$', apiviews.highscores, name='highscores'),
     url(r'^api/highscores/(?P<object_id>[0-9]+)/$', apiviews.highscoresPerGame, name='highscoresPerGame'),
     url(r'^api/sales/(?P<object_id>[0-9]+)/$', apiviews.saleStatistics, name='saleStatistics'),
-
 ]
