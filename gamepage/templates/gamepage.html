@@ -17,12 +17,12 @@
     <div class="gamepageArena">
         <div class="iframeAndScore">
             <iframe id="game_iframe"
+                name="iframe"
                 width="500"
                 height="300"
                 src="{{game.game_url}}"
                 sandbox="allow-scripts allow-modals"
-                <p>Your browser does not support iframes.</p>
-            </iframe>
+            ></iframe>
             {% if highscores %}
                 <h2 class="scoreTitle">Highscores:</h2>
                 <ol class="game_highscore">
@@ -42,23 +42,21 @@
         </div>
     {% endif %}
     {% csrf_token %}
-    <script type="text/javascript">
+    <script>
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
         var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-        const childWindow = document.getElementById("game_iframe").contentWindow;
-        window.addEventListener("message", e => {
-            if (e.source === childWindow ) {
+        var childWindow = document.getElementById("game_iframe").contentWindow;
+        window.addEventListener("message", (e) => {
+            if (e.source === childWindow) {
                 switch(e.data.messageType) {
                     case "SETTING":
-                        var settingWidth = e.data.options.width;
-                        var settingHeight = e.data.options.height;
-                        document.getElementById("game_iframe").width = settingWidth;
-                        document.getElementById("game_iframe").height = settingHeight;
+                        document.getElementById("game_iframe").width = e.data.options.width;
+                        document.getElementById("game_iframe").height = e.data.options.height;
                         break;
                     case "LOAD_REQUEST":
-                        function csrfSafeMethod(method) {
-                            // these HTTP methods do not require CSRF protection
-                            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-                        }
                         $.ajaxSetup({
                             beforeSend: function(xhr, settings) {
                                 if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -72,15 +70,15 @@
                             "url": "./loadgamedata/",
                             success: function(data) {
                                 var gameState = JSON.parse(data.gameState);
-                                if (gameState == null) {
+                                if (gameState === null) {
                                     var message =  {
                                         messageType: "ERROR",
                                         info: "Gamestate could not be loaded"
                                     };
                                 } else {
-                                    var message  = {
+                                    var message = {
                                         messageType: "LOAD",
-                                        gameState: gameState,
+                                        gameState: gameState
                                     };
                                 }
                                 document.getElementById("game_iframe").contentWindow.postMessage(message, '*');
@@ -98,9 +96,8 @@
                 }
             }
         });
-
-    <!-- Twitter Button -->
     </script>
+    <!-- Twitter Button -->
     <a class="twitter-share-button"
       href="https://twitter.com/share"
       data-size="large"
@@ -110,7 +107,7 @@
       data-related="twitterapi,twitter">
     Tweet
     </a>
-    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <script async src="https://platform.twitter.com/widgets.js"></script>
 
 
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     {% block title %}{% endblock %}
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -43,20 +43,20 @@
             </li>
         </ul>
         <div class="dropdown-divider"></div>
-        <div class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-right">
             <li class="nav-item">
                 {% if request.user.is_authenticated %}
-                    <a class="nav-link" href="{% url 'profile' %}"<strong>Profile</strong></a>
+                    <strong><a class="nav-link" href="{% url 'profile' %}">Profile</a></strong>
                 {% endif %}
             </li>
             <li class="nav-item">
                 {% if request.user.is_authenticated %}
-                    <a class="nav-link" href="{% url 'logout' %}"<strong>Logout</strong></a>
+                    <strong><a class="nav-link" href="{% url 'logout' %}">Logout</a></strong>
                 {% else %}
-                    <a class="nav-link" href="{% url 'login' %}"<strong>Login</strong></a>
+                    <strong><a class="nav-link" href="{% url 'login' %}">Login</a></strong>
                 {% endif %}
             </li>
-        </div>
+        </ul>
         </div>
     </nav>
 
