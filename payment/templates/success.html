@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
+{% block title %}
+    <title>Purchase successful</title>
+{% endblock %}
+
 {% block content %}
-<h1>Game shop asd </h1>
-
-  <p> The purchase of the game <b>{{game.name}}</b> was successful. </p>
-  <a href="{% url 'gamepage' gameid=game.id %}" class="btn btn-default">Play now!</a>
-
+    <h1>Game shop asd</h1>
+    <p>The purchase of the game <b>{{game.name}}</b> was successful.</p>
+    <a href="{% url 'gamepage' gameid=game.id %}" class="btn btn-primary" role="button">Play now!</a>
 {% endblock %}

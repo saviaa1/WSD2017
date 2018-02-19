@@ -1,5 +1,14 @@
-<form method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit" />
-</form>
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Add game</title>
+{% endblock %}
+
+{% block content %}
+    <form class="addGame" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <br>
+        <input type="submit" value="Submit" />
+    </form>
+{% endblock %}

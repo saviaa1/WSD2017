@@ -15,6 +15,23 @@
     text-align: left;
 }
 
+.listOfGames {
+    width: 50%;
+    text-align: center;
+    align-items: flex-start;
+}
+
+.addGame {
+    width: 20%;
+    height: auto;
+    display: grid;
+    text-align: left;
+}
+
+.becomindDev {
+    margin: 1%;
+}
+
 .arena {
     align-items: center;
     --content-width: 80vw;

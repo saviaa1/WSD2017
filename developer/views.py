@@ -1,5 +1,3 @@
-from django.shortcuts import render
-from django.core.validators import URLValidator
 from gamelist.models import Game
 from developer.forms import AddGame
 from django.shortcuts import render, redirect
@@ -11,6 +9,7 @@ from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from payment.models import Purchase
 
+
 # Create your views here.
 @login_required
 def adding(request):
@@ -20,7 +19,7 @@ def adding(request):
             instance = form.save(commit=False)
             instance.developer = request.user.profile
             instance.save()
-            return redirect('index')
+            return redirect('profile')
     else:
         form = AddGame()
     isDeveloper = request.user.profile.developer
@@ -29,9 +28,10 @@ def adding(request):
     else:
         return redirect('index')
 
+
 @login_required
 def deleting(request, object_id):
-    game = Game.objects.get( id = object_id )
+    game = Game.objects.get(id=object_id)
     gameOwned = game.developer == request.user.profile
     if gameOwned:
         object = get_object_or_404(Game, pk=object_id)
@@ -39,6 +39,7 @@ def deleting(request, object_id):
         return redirect('profile')
     else:
         return redirect('profile')
+
 
 @login_required
 def profile(request):
@@ -53,16 +54,17 @@ def profile(request):
     except UserSocialAuth.DoesNotExist:
         googleLogin = None
 
-    userCanLogout  = (user.social_auth.count() > 1 or user.has_usable_password())
+    userCanLogout = (user.social_auth.count() > 1 or user.has_usable_password())
     return render(request, 'profile.html', {
         'twitterLogin': twitterLogin,
         'googleLogin': googleLogin,
         'userCanLogout': userCanLogout,
     })
 
+
 @login_required
 def editing(request, object_id):
-    game = Game.objects.get( id = object_id )
+    game = Game.objects.get(id=object_id)
     gameOwned = game.developer == request.user.profile
     if gameOwned:
         if request.method == 'POST':
@@ -74,10 +76,11 @@ def editing(request, object_id):
                 return redirect('profile')
         else:
             form = AddGame(instance=game)
-        c = { "form": form, "object_id": game }
+        c = {"form": form, "object_id": game}
         return render(request, "adding.html", c)
     else:
         redirect(request, 'profile.html')
+
 
 @login_required
 def password(request):
@@ -101,14 +104,13 @@ def password(request):
 
 @login_required
 def statistics(request, object_id):
-    game = Game.objects.get( id = object_id )
+    game = Game.objects.get(id=object_id)
     gameOwned = game.developer == request.user.profile
-    purchase = Purchase.objects.filter( gameid = object_id )
+    purchase = Purchase.objects.filter(gameid=object_id)
     if gameOwned:
         return render(request, 'statistics.html', {
             'game': game,
             'purchase': purchase
-
-    })
+        })
     else:
         return redirect('profile')
