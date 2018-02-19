@@ -63,6 +63,7 @@ def activate(request, uidb64, token, backend='django.contrib.auth.backends.Model
 def authEmailSent(request):
     return render(request, 'authEmailSent.html')
 
+#View to change players to developers
 @login_required
 def developer(request):
     user = request.user

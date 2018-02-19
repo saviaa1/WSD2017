@@ -40,7 +40,7 @@ def deleting(request, object_id):
     else:
         return redirect('profile')
 
-
+#View to render profile page for users and developers
 @login_required
 def profile(request):
     user = request.user
@@ -61,7 +61,7 @@ def profile(request):
         'userCanLogout': userCanLogout,
     })
 
-
+# View for editing games
 @login_required
 def editing(request, object_id):
     game = Game.objects.get(id=object_id)
@@ -81,7 +81,7 @@ def editing(request, object_id):
     else:
         redirect(request, 'profile.html')
 
-
+# View for social_auth so that users don't get locked out of the site
 @login_required
 def password(request):
     if request.user.has_usable_password():
