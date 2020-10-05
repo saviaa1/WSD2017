@@ -150,13 +150,13 @@ We feel that the division of work was successful and everyone did approximately 
 We also utilized pair programming for development at our weekly meetings.
 
 ### How to use
-The web application is deployed at URL
+The web application is deployed at ***REMOVED***.
 Registering a new user requires email-authentication, but we use Django's Console Backend as advised in the project description.
 Threfore, instead of creating a new account, you may use the following accounts to test the service:  
 **Developers: (username, password)**  
-***REMOVED***
-***REMOVED***
 ***REMOVED***  
+***REMOVED*** 
+***REMOVED*** 
 **Users: (username, password)**  
 ***REMOVED***
 ***REMOVED***

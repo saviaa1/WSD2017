@@ -9,6 +9,7 @@ from payment.models import Purchase
 from django.contrib.auth.decorators import login_required
 
 sid = "GameShopASD"
+# Move secret_key to enviromental variable.
 secret_key = "***REMOVED***"
 
 # Create your views here.
